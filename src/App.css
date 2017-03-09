@@ -1,0 +1,55 @@
+.App {
+  text-align: center;
+}
+.title{
+  border-bottom: 2px solid lightblue;
+  max-width: 520px;
+  margin: 15px auto 35px auto;
+}
+.image-container{
+  width: 100%;
+  max-width: 720px;
+  margin: auto;
+}
+
+.bolt-image{
+  width: 100%;
+  max-width: 350px;
+  margin: auto;
+  height: auto;
+}
+
+.input-box{
+  width: 100%;
+  max-width: 720px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  min-height: 50px;
+}
+.comment-container{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 720px;
+  margin: auto;
+  border: 1px solid lightblue;
+}
+.comment-box{
+width: 100%;
+/*border: 2px solid;*/
+
+}
+
+.comment-box p {
+  margin: 2px;
+}
+
+.comment-box:nth-child(even){
+  background-color: #f1f1f1;
+  padding: 3px;
+}
+
+.comment-box:nth-child(odd){
+  background-color: lightblue;
+  padding: 3px;
+}
