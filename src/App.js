@@ -87,8 +87,8 @@ class InputBox extends Component{
   render(){
     return(
       <Form onSubmit={this.handleSubmit}>
-      <Input className={"input-box"} floatingLabel={true} label={'Write a comment and press Enter'} onChange={this.handleChange} value={this.state.value} />
-      <Button variant={"raised"} color={"danger"} >post</Button>
+      <Input className={"input-box"} required={true} floatingLabel={true} label={'Write a comment and press Enter'} onChange={this.handleChange} value={this.state.value} />
+      <Button variant={"raised"} color={"primary"} >post</Button>
       </Form>    
     )
   }
