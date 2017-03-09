@@ -7,6 +7,8 @@ import 'firebase/auth';
 import 'firebase/database'
 import * as firebaseui from "firebaseui";
 import bolt from './img/bolt.jpg';
+import {Form, Textarea, Button, Input} from 'muicss/react';
+import '../node_modules/muicss/dist/css/mui.css';
 
 // Initialise the Firebase App
 
@@ -44,47 +46,50 @@ class InputBox extends Component{
     };
     
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event){
-    const currentText = event.target.value.slice();
-    this.setState({value: currentText});
-    const lastChar = currentText.charAt(currentText.length - 1);
+  handleSubmit(submitEvent){
+    event.preventDefault();
     
-    if ( lastChar === '\n' && currentText.length !== 1){
-
-      //Alert user if they are not signed in
-      if (this.props.userDisplayName === ""){
+    if (this.props.userDisplayName === ""){
       alert("You cannot leave a comment if you are not signed in");
-      this.setState({value: currentText.substring(0,currentText.length-1)});
       return null;
     };
       
-      // generate a new object in the posts node
-      var newPostKey = firebase.database().ref().child('posts').push().key;
+    // generate a new object in the posts node
+    var newPostKey = firebase.database().ref().child('posts').push().key;
 
-      //generate the comments object
-      var dbComment = {
-        comment: currentText.substring(0, currentText.length - 1),
-        userDisplayName: this.props.userDisplayName,
-        userPhotoURL: this.props.userPhotoURL
-      };
+    //generate the comments object
+    var dbComment = {
+    comment: this.state.value.slice(),
+    userDisplayName: this.props.userDisplayName,
+    userPhotoURL: this.props.userPhotoURL
+    };
 
-      // Define a new object dbComment that will be passed to db
-      var dbObject = {};
-      dbObject['/posts/' + newPostKey] = dbComment;
-      //Submit to db  
-      firebase.database().ref().update(dbObject);
+    // Define a new object dbComment that will be passed to db
+    var dbObject = {};
+    dbObject['/posts/' + newPostKey] = dbComment;
+    //Submit to db  
+    firebase.database().ref().update(dbObject);
       
     //Reset the text textarea
      this.setState({value: ""});
-    }
+  }
 
+  handleChange(event){
+    event.preventDefault();
+    const currentText = event.target.value.slice();
+    this.setState({value: currentText});
   }  
+
+
   render(){
     return(
-      <textarea className="input-box" placeholder={"Enter your comment here and press Enter"} value={this.state.value} onChange={this.handleChange} ></textarea>
-      
+      <Form onSubmit={this.handleSubmit}>
+      <Input className={"input-box"} floatingLabel={true} label={'Write a comment and press Enter'} onChange={this.handleChange} value={this.state.value} />
+      <Button variant={"raised"} color={"danger"} >post</Button>
+      </Form>    
     )
   }
 }
