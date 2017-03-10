@@ -10,7 +10,7 @@ import {Router, Route, browserHistory} from 'react-router';
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route path="/" component={Welcome} />
-    <Route path="/pet-page" component={PetPage} />
+    <Route path="/pet/:id" component={PetPage} />
   </Router>,
   document.getElementById('root')
 );

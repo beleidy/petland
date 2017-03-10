@@ -6,20 +6,20 @@ import * as firebase from "firebase";
 import 'firebase/auth';
 import 'firebase/database'
 import * as firebaseui from "firebaseui";
-import bolt from './img/bolt.jpg';
 import { Form, Button, Input, Appbar, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 
 // Initialise the Firebase App
 
 // Initialize Firebase
-var config = {
-  apiKey: "AIzaSyBrnkI94u4OARVGxfmCbN9ZP-zBByJGUnw",
-  authDomain: "bolt-724ba.firebaseapp.com",
-  databaseURL: "https://bolt-724ba.firebaseio.com",
-  storageBucket: "bolt-724ba.appspot.com",
-  messagingSenderId: "723766986371"
-};
+// Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCy8OwL_E1rrYfutk5vqLygz20RmGW-GBE",
+    authDomain: "petland-4b867.firebaseapp.com",
+    databaseURL: "https://petland-4b867.firebaseio.com",
+    storageBucket: "petland-4b867.appspot.com",
+    messagingSenderId: "784140166304"
+  };
 firebase.initializeApp(config);
 
 //Initialise the firebase auth app
@@ -63,9 +63,6 @@ class InputBox extends Component {
       return null;
     }
 
-    // generate a new object in the posts node
-    var newPostKey = firebase.database().ref().child('posts').push().key;
-
     //generate the comments object
     var dbComment = {
       comment: this.state.value.slice(),
@@ -73,11 +70,8 @@ class InputBox extends Component {
       userPhotoURL: this.props.userPhotoURL
     };
 
-    // Define a new object dbComment that will be passed to db
-    var dbObject = {};
-    dbObject['/posts/' + newPostKey] = dbComment;
-    //Submit to db  
-    firebase.database().ref().update(dbObject);
+    // generate a new object in the posts node
+    firebase.database().ref().child('/comments/'+this.props.petId).push(dbComment);
 
     //Reset the text textarea
     this.setState({ value: "" });
@@ -125,7 +119,8 @@ class PetPage extends Component {
     super();
     this.state = {
       comments: [],
-      user: { signedIn: 0, displayName: "", photoURL: "" }
+      user: { signedIn: 0, displayName: "", photoURL: "" },
+      pet: {name: "", imageURL: ""}
     }
   }
 
@@ -153,8 +148,13 @@ class PetPage extends Component {
       }
     });
 
+    //Get pet information from db
+    firebase.database().ref().child('/pets/'+this.props.params.id).once('value', (snapshot) => {
+      this.setState({pet: {name: snapshot.val().name, imageURL: snapshot.val().imageURL}});
+    })
+
     //Runs once for each child in posts node
-    firebase.database().ref().child('/posts/').on('child_added', (snapshot) => {
+    firebase.database().ref().child('/comments/'+this.props.params.id).on('child_added', (snapshot) => {
 
       //Take the comment and key from the db and put them in local consts
       const commentText = snapshot.val().comment;
@@ -173,15 +173,15 @@ class PetPage extends Component {
     return (
       <div className="App">
         <Appbar>
-          <h1 className="title">BOLT</h1>
+          <h1 className="title">{this.state.pet.name}</h1>
         </Appbar>
         <div className="image-container">
-          <img className="bolt-image" src={bolt} alt="Bolt the cat"></img>
+          <img className="bolt-image" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
         </div>
         {this.state.user.signedIn ? "" : (<div id="firebaseui-auth-container"></div>)}
         {this.state.user.signedIn ?
           (<p> Welcome, {this.state.user.displayName} <span className="sign-out"><a className="sign-out-link" onClick={this.userSignOut}>Sign out</a></span> </p>) : ''}
-        <InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} />
+        <InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} petId={this.props.params.id} />
         <div className="comment-container">
           {/* Display comments in reverse order without affecting state array*/}
           {this.state.comments.slice().reverse()}
