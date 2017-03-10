@@ -9,7 +9,6 @@ import * as firebaseui from "firebaseui";
 import bolt from './img/bolt.jpg';
 import { Form, Button, Input, Appbar, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
-import {browserHistory} from 'react-router';
 
 // Initialise the Firebase App
 
@@ -124,7 +123,6 @@ class PetPage extends Component {
   //Constructs the app with an empty set of comments
   constructor() {
     super();
-    console.debug("Construct");
     this.state = {
       comments: [],
       user: { signedIn: 0, displayName: "", photoURL: "" }
@@ -139,9 +137,6 @@ class PetPage extends Component {
   // After the app mounts, connects with firebase and retrieves comments, 
   // and puts the react component in state array
   componentDidMount() {
-
-    console.debug("Mount");
-
 
     //Set observer on user state
 
