@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 //import logo from './logo.svg';
-import './App.css';
+import './pet-page.css';
 import './firebaseui.css';
 import * as firebase from "firebase";
 import 'firebase/auth';
 import 'firebase/database'
 import * as firebaseui from "firebaseui";
 import bolt from './img/bolt.jpg';
-import { Form, Textarea, Button, Input, Appbar, Panel } from 'muicss/react';
+import { Form, Button, Input, Appbar, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 
 // Initialise the Firebase App
@@ -58,7 +58,7 @@ class InputBox extends Component {
     };
 
 
-    if (this.state.value.slice() == '') {
+    if (this.state.value.slice() === '') {
       alert("You cannot submit an empty comment")
       return null;
     }
@@ -118,7 +118,7 @@ class CommentBox extends Component {
 }
 
 // The main app
-class App extends Component {
+class PetPage extends Component {
 
   //Constructs the app with an empty set of comments
   constructor() {
@@ -196,5 +196,5 @@ class App extends Component {
   }
 }
 
-export { App as default };
+export { PetPage as default };
 
