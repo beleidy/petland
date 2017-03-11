@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './welcome.css';
 import { Link } from 'react-router';
-import { Appbar } from 'muicss/react';
+import { Appbar, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 import * as firebase from "firebase";
 // import 'firebase/auth';
@@ -9,15 +9,14 @@ import 'firebase/database'
 
 class PetPreview extends Component{
     render(){
+        let s = {backgroundImage: "url("+this.props.petImageURL+")"};
+
         return(
-            <div>
-            <figure>
-            <img src={this.props.petImageURL} alt={this.props.petName} />
-            <figcaption>
-            <Link to={"/pet/"+this.props.petId}>{this.props.petName}</Link>
-            </figcaption>
-            </figure>
-            </div>
+            <Link className="pet-card-link" to={"/pet/"+this.props.petId}>
+                <div className="pet-card mui--z3" style={s}>    
+                    <div className="pet-caption"><span>{this.props.petName}</span></div>
+                </div>
+            </Link>
         )
     }
 }
@@ -44,11 +43,8 @@ class Welcome extends Component{
 
     render(){
         return(
-            <div className="welcome">
-            <Appbar>
-            <h1 className="title">Welcome</h1>
-            </Appbar>
-            {this.state.pets}
+            <div className="welcome-container">
+            {this.state.pets.slice().reverse()}
             </div>
         )
     }
