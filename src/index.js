@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PetPage from './pet-page';
+import PetPage from './pet';
 import Welcome from './welcome';
 import './index.css';
 import {Router, Route, browserHistory} from 'react-router';

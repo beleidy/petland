@@ -35,7 +35,6 @@ class Welcome extends Component{
             const petName = snapshot.val().name;
             const petImageURL = snapshot.val().imageURL;
             // Generate the react element holding the pet
-            console.debug(snapshot.key);
             var reactElement = <PetPreview key={snapshot.key} petId={snapshot.key} petName={petName} petImageURL={petImageURL} /> 
             
             //Add it to the previous state
