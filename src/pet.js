@@ -22,8 +22,9 @@ class InputBox extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    var fuser = firebase.auth().currentUser;
 
-    if (this.props.userDisplayName === "") {
+    if (!fuser) {
       alert("You cannot leave a comment if you are not signed in");
       return null;
     };
@@ -49,9 +50,15 @@ class InputBox extends Component {
   }
 
   handleChange(event) {
-    event.preventDefault();
-    const currentText = event.target.value.slice();
-    this.setState({ value: currentText });
+    var fuser = firebase.auth().currentUser;
+     if (!fuser) {
+        alert("You cannot leave a comment if you are not signed in");
+        return null;
+    } else{
+        event.preventDefault();
+        const currentText = event.target.value.slice();
+        this.setState({ value: currentText });
+    }
   }
 
 
