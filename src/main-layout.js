@@ -10,8 +10,7 @@ class MainLayout extends Component{
         const navTableStyle = {verticalAlign: 'middle'};
         const navLeft = {justifyContent: "left"};
         const navRight = {textAlign: "right"};
-
-
+        
         return(
             <div className="layout-container">
                 <div className="nav-bar">
