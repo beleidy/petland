@@ -22,14 +22,17 @@ class InputBox extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    
+    //Get firebase current user
     var fuser = firebase.auth().currentUser;
 
+    //Checks if a user is signed in from firebase and alerts
     if (!fuser) {
       alert("You cannot leave a comment if you are not signed in");
       return null;
     };
 
-
+    //Checks if a comment is empty and alerts
     if (this.state.value.slice() === '') {
       alert("You cannot submit an empty comment")
       return null;
@@ -37,6 +40,7 @@ class InputBox extends Component {
 
     //generate the comments object
     var dbComment = {
+      authorId: fuser.uid,
       comment: this.state.value.slice(),
       userDisplayName: this.props.userDisplayName,
       userPhotoURL: this.props.userPhotoURL
