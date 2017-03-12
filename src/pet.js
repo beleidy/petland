@@ -88,7 +88,7 @@ class InputBox extends Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         <Input className={"input-box"} floatingLabel={true} label={'Write a comment and press Enter'} onChange={this.handleChange} value={this.state.value} />
-        <Button variant={"raised"} color={"primary"} >post</Button>
+        <Button variant="raised" >post</Button>
       </Form>
     )
   }
@@ -172,11 +172,9 @@ class PetPage extends Component {
   render() {
     return (
       <div className="App">
-        <Appbar>
           <h1 className="title">{this.state.pet.name}</h1>
-        </Appbar>
         <div className="image-container">
-          <img className="bolt-image" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
+          <img className="bolt-image mui--z1" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
         </div>
         {this.state.user.signedIn ? "" : (<div id="firebaseui-auth-container"></div>)}
         {this.state.user.signedIn ?
