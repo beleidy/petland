@@ -24,14 +24,6 @@
   border-radius: 2px;
 }
 
-.sign-out{
-  font-size: 10px;
-}
-
-.sign-out-link{
-cursor: pointer;
-}
-
 .input-box{
   width: 85%;
   margin: 15px auto 10px!important;

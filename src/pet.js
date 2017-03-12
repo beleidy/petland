@@ -1,41 +1,12 @@
 import React, { Component } from 'react';
 //import logo from './logo.svg';
 import './pet.css';
-import './firebaseui.css';
 import * as firebase from "firebase";
 import 'firebase/auth';
 import 'firebase/database'
-import * as firebaseui from "firebaseui";
 import { Form, Button, Input, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 
-// Initialise the Firebase App
-
-// Initialize Firebase
-// Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCy8OwL_E1rrYfutk5vqLygz20RmGW-GBE",
-    authDomain: "petland-4b867.firebaseapp.com",
-    databaseURL: "https://petland-4b867.firebaseio.com",
-    storageBucket: "petland-4b867.appspot.com",
-    messagingSenderId: "784140166304"
-  };
-firebase.initializeApp(config);
-
-//Initialise the firebase auth app
-var uiConfig = {
-  signInSuccessUrl: '#',
-  signInOptions: [
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-  ],
-  // Terms of service url.
-  tosUrl: '#'
-};
-
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-// ui.start('#firebaseui-auth-container', uiConfig);
 
 //Comment input box
 class InputBox extends Component {
@@ -51,13 +22,17 @@ class InputBox extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    
+    //Get firebase current user
+    var fuser = firebase.auth().currentUser;
 
-    if (this.props.userDisplayName === "") {
+    //Checks if a user is signed in from firebase and alerts
+    if (!fuser) {
       alert("You cannot leave a comment if you are not signed in");
       return null;
     };
 
-
+    //Checks if a comment is empty and alerts
     if (this.state.value.slice() === '') {
       alert("You cannot submit an empty comment")
       return null;
@@ -65,6 +40,7 @@ class InputBox extends Component {
 
     //generate the comments object
     var dbComment = {
+      authorId: fuser.uid,
       comment: this.state.value.slice(),
       userDisplayName: this.props.userDisplayName,
       userPhotoURL: this.props.userPhotoURL
@@ -78,9 +54,15 @@ class InputBox extends Component {
   }
 
   handleChange(event) {
-    event.preventDefault();
-    const currentText = event.target.value.slice();
-    this.setState({ value: currentText });
+    var fuser = firebase.auth().currentUser;
+     if (!fuser) {
+        alert("You cannot leave a comment if you are not signed in");
+        return null;
+    } else{
+        event.preventDefault();
+        const currentText = event.target.value.slice();
+        this.setState({ value: currentText });
+    }
   }
 
 
@@ -124,11 +106,6 @@ class PetPage extends Component {
     }
   }
 
-  userSignOut = () => {
-    firebase.auth().signOut();
-
-  }
-
   // After the app mounts, connects with firebase and retrieves comments, 
   // and puts the react component in state array
   componentDidMount() {
@@ -144,7 +121,6 @@ class PetPage extends Component {
 
         // No user is signed in.
         this.setState({ user: { signedIn: 0, displayName: "", photoURL: "" } });
-        ui.start('#firebaseui-auth-container', uiConfig);
       }
     });
 
@@ -176,12 +152,8 @@ class PetPage extends Component {
         <div className="image-container">
           <img className="bolt-image mui--z1" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
         </div>
-        {this.state.user.signedIn ? "" : (<div id="firebaseui-auth-container"></div>)}
-        {this.state.user.signedIn ?
-          (<p> Welcome, {this.state.user.displayName} <span className="sign-out"><a className="sign-out-link" onClick={this.userSignOut}>Sign out</a></span> </p>) : ''}
         <InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} petId={this.props.params.id} />
         <div className="comment-container">
-          {/* Display comments in reverse order without affecting state array*/}
           {this.state.comments.slice().reverse()}
         </div>
       </div>

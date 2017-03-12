@@ -5,7 +5,17 @@ import Welcome from './welcome';
 import './index.css';
 import {Router, Route, browserHistory} from 'react-router';
 import MainLayout from './main-layout';
+import * as firebase from "firebase";
 
+// Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCy8OwL_E1rrYfutk5vqLygz20RmGW-GBE",
+    authDomain: "petland-4b867.firebaseapp.com",
+    databaseURL: "https://petland-4b867.firebaseio.com",
+    storageBucket: "petland-4b867.appspot.com",
+    messagingSenderId: "784140166304"
+  };
+firebase.initializeApp(config);
 
 
 ReactDOM.render(
