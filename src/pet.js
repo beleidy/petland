@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import './pet.css';
 import * as firebase from "firebase";
 import 'firebase/auth';

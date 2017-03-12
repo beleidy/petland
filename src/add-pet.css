@@ -1,0 +1,9 @@
+.add-pet-container{
+    margin-top: 20px;
+    width: 100%;
+}
+
+.add-pet-form{
+    max-width: 640px;
+    margin: auto;
+}

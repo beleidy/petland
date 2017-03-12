@@ -65,6 +65,16 @@
     margin-right: 15px;
     margin-left: 5px;
 }
+
+.active-navbar-link{
+    color: lightgrey;
+    text-decoration: none;
+}
+
+.active-fab{
+    display: none;
+}
+
 .logo{
     color: white;
     text-decoration: none;
