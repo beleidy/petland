@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './welcome.css';
 import { Link } from 'react-router';
-import { Appbar, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 import * as firebase from "firebase";
 // import 'firebase/auth';

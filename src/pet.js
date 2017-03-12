@@ -6,7 +6,7 @@ import * as firebase from "firebase";
 import 'firebase/auth';
 import 'firebase/database'
 import * as firebaseui from "firebaseui";
-import { Form, Button, Input, Appbar, Panel } from 'muicss/react';
+import { Form, Button, Input, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 
 // Initialise the Firebase App
