@@ -67,6 +67,12 @@
     margin-left: 5px;
 }
 
+@media (max-width: 500px) {
+    .nav-link{
+        display: none;
+    }
+}
+
 .active-navbar-link{
     color: lightgrey;
     text-decoration: none;
