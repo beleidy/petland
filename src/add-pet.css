@@ -5,6 +5,8 @@
 
 .sign-in-request{
     font-size: 1.5em;
+    max-width: 640px;
+    margin: auto;
 }
 
 .add-pet-form{
