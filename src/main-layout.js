@@ -69,9 +69,9 @@ userSignOut = () => {
                                 </td>
                                 <td className="mui--appbar-height" style={navRight}>
                                     <div className="nav-right-container">
-                                        <div ><Link className="nav-link" to="/add-pet">Add Pet</Link></div>
+                                        <div ><Link className="nav-link" activeClassName="active-navbar-link" to="/add-pet">Add Pet</Link></div>
                                         {this.state.user.signedIn ? 
-                                        (<div><span className="nav-user-name">{this.state.user.displayName}</span><a className="nav-sign-out-link" onClick={this.userSignOut}>Sign out</a></div>) 
+                                        (<div><span className="nav-user-name">{this.state.user.displayName}</span> - <a className="nav-sign-out-link" onClick={this.userSignOut}>Sign out</a></div>) 
                                         : ""}
                                         {this.state.user.signedIn ? "" : (<div id="firebaseui-auth-container" className="mui--appbar-height"></div>)}
                                     </div>
@@ -85,7 +85,7 @@ userSignOut = () => {
                 <div className="view-container">
                     {this.props.children}
                 </div>
-               <Link to="/add-pet"><Button className="add-pet-fab" variant="fab" color="primary">+</Button></Link>
+               <Link to="/add-pet" activeClassName="active-fab"><Button className="add-pet-fab" variant="fab" color="primary">+</Button></Link>
             </div>
 
         );

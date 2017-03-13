@@ -57,6 +57,7 @@
     cursor: pointer;
     font-size: 0.8em;
     margin-left: 3px;
+    color: white;
 }
 
 .nav-link{
@@ -65,6 +66,16 @@
     margin-right: 15px;
     margin-left: 5px;
 }
+
+.active-navbar-link{
+    color: lightgrey;
+    text-decoration: none;
+}
+
+.active-fab{
+    display: none;
+}
+
 .logo{
     color: white;
     text-decoration: none;
