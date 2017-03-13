@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.sign-in-request{
+    font-size: 1.5em;
+}
+
 .add-pet-form{
     max-width: 640px;
     margin: auto;
