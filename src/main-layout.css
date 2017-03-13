@@ -37,6 +37,12 @@
     align-items: center;
 }
 
+@media (max-width: 400px){
+    #firebaseui-auth-container{
+        width: 50px !important;
+    }
+}
+
 .firebaseui-card-content{
     padding: 0px !important;
 }
