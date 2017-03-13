@@ -24,6 +24,11 @@
   border-radius: 2px;
 }
 
+.pet-sign-in-request{
+    font-size: 1.5em;
+    margin-top: 15px;
+}
+
 .input-box{
   width: 85%;
   margin: 15px auto 10px!important;
