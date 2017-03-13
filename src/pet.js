@@ -101,7 +101,7 @@ class PetPage extends Component {
     this.state = {
       comments: [],
       user: { signedIn: 0, displayName: "", photoURL: "" },
-      pet: {name: "", imageURL: ""}
+      pet: {name: "", imageURL: ""},
     }
   }
 
@@ -110,7 +110,6 @@ class PetPage extends Component {
   componentDidMount() {
 
     //Set observer on user state
-
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
@@ -151,17 +150,15 @@ class PetPage extends Component {
         <div className="image-container">
           <img className="bolt-image mui--z1" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
         </div>
-        <InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} petId={this.props.params.id} />
+        {this.state.user.signedIn? 
+        (<InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} petId={this.props.params.id} />)
+        : (<div className="pet-sign-in-request">Please sign in to leave a comment</div>)}
         <div className="comment-container">
           {this.state.comments.slice().reverse()}
         </div>
       </div>
     );
   }
-
-componentWillUnmount(){
-
-}
 }
 
 export { PetPage as default };
