@@ -13,7 +13,7 @@ import * as firebase from "firebase";
     apiKey: "AIzaSyCy8OwL_E1rrYfutk5vqLygz20RmGW-GBE",
     authDomain: "petland-4b867.firebaseapp.com",
     databaseURL: "https://petland-4b867.firebaseio.com",
-    storageBucket: "petland-4b867.appspot.com",
+    storageBucket: "gs://petland-4b867.appspot.com/",
     messagingSenderId: "784140166304"
   };
 firebase.initializeApp(config);

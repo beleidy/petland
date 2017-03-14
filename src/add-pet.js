@@ -18,6 +18,7 @@ class AddPet extends Component{
         // Bind the change and submit handler this to component this
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleFiles = this.handleFiles.bind(this);
     }
     componentDidMount(){
          //Set observer on user state
@@ -81,6 +82,39 @@ class AddPet extends Component{
     handleChange(event){
         this.setState({[event.target.name]: event.target.value});
     }
+
+    handleFiles(file){
+        console.debug("Handle files fired");
+
+        //define File object
+        const fileObject = file.nativeEvent.target.files[0];
+
+        //get file name
+        const fileName = fileObject.name;
+
+        //Create a storage bucket root refrence
+        const storageRootRef = firebase.storage().ref();
+
+        //Get user id from firebase
+        const uid = firebase.auth().currentUser.uid;
+
+        //Create a firebase storage bucket file refrence using user id and file name
+        const storageFileRef = storageRootRef.child(uid+'/'+fileName);
+        
+        console.log("Upload about to start");
+        var uploadTask = storageFileRef.put(fileObject);
+
+        uploadTask.on("state_changed", (snapshot)=>{
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            }, (error) => {
+                console.debug("Upload Error");
+            }, ()=>{
+                console.debug("Upload Success!");
+                console.debug(uploadTask.snapshot.downloadURL);
+            }
+        );    
+    }
     
     render(){
         return(
@@ -90,6 +124,7 @@ class AddPet extends Component{
                     <legend>Add my pet</legend>
                     <Input name="petName" required={true} label="Your pet's name" floatingLabel={true} onChange={this.handleChange} value={this.state.petName} />
                     <Input name="imageURL" required={true} type={'url'} label="Link to its image" floatingLabel={true} onChange={this.handleChange} value={this.state.imageURL} />
+                    <input name="imageFile" type="file" label="Select image to upload" onChange={this.handleFiles} /><br/><br/>
                     <Button variant="raised">Add my pet</Button>
                 </Form>)
             : (<div className="sign-in-request">Please sign in to add a pet</div>)}
