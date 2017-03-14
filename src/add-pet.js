@@ -42,7 +42,10 @@ class AddPet extends Component{
             return null;
         }
         else{
+            //Replace http with https in imageURL
+            this.setState((prevState, props) => {return{imageURL: prevState.imageURL.replace("http", "https")}}, ()=>{
             //Use fetch api to check that the url is an image 
+            console.log(this.state.imageURL);
             fetch(this.state.imageURL).then((response) => {
                 //get link type 
                 const linkType = response.headers.get("content-type");
@@ -74,7 +77,7 @@ class AddPet extends Component{
                     return null;
                 }
             )
-        } 
+            }); }
     }
 
     handleChange(event){
