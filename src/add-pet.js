@@ -43,41 +43,39 @@ class AddPet extends Component{
         }
         else{
             //Replace http with https in imageURL
-            this.setState((prevState, props) => {return{imageURL: prevState.imageURL.replace("http", "https")}}, ()=>{
+            const secureImage = this.state.imageURL.replace("http", "https");
+            
             //Use fetch api to check that the url is an image 
-            console.log(this.state.imageURL);
-            fetch(this.state.imageURL).then((response) => {
+            fetch(secureImage).then((response) => {
                 //get link type 
                 const linkType = response.headers.get("content-type");
                 //Check if type is an image and pass result to .then function
                 return linkType.startsWith("image");
             }).then((isImage)=>{
-                    //If target of the link is an image
-                    if (isImage){
-                        //Get firebase user id
-                        const ownerId = firebase.auth().currentUser.uid;
-                        //Create object to be passed to firebase 
-                        const dbNewPet = {name: this.state.petName, imageURL: this.state.imageURL, ownerId: ownerId};
-                        //Push new pet information to firebase
-                        firebase.database().ref().child('/pets/').push(dbNewPet);
-                        console.debug("Submit");
-                        //Reset state
-                        this.setState({petName: "", imageURL: ""});
-                        //Navigate user back to welcome page
-                        this.props.router.push("/");
-            //If the link is not an image alert user and abort submission to firebase    
-            }else{
+                //If target of the link is an image
+                if (isImage){
+                    //Get firebase user id
+                    const ownerId = firebase.auth().currentUser.uid;
+                    //Create object to be passed to firebase 
+                    const dbNewPet = {name: this.state.petName, imageURL: secureImage, ownerId: ownerId};
+                    //Push new pet information to firebase
+                    firebase.database().ref().child('/pets/').push(dbNewPet);
+                    //Reset state
+                    this.setState({petName: "", imageURL: ""});
+                    //Navigate user back to welcome page
+                    this.props.router.push("/");
+                //If the link is not an image alert user and abort submission to firebase    
+                }else{
                     alert("Link is not a link to an image");
                     return null;
                 }
                 //If the fetch request doesn't work (usually due to no-cors allowed) - show the error in the console
             }).catch((error) => {
-                    console.log(error);
-                    alert("Sorry, your link did not work - are you sure it is a direct link to the image?");
-                    return null;
-                }
-            )
-            }); }
+                console.log(error);
+                alert("Sorry, your link did not work - are you sure it is a direct link to the image?");
+                return null;
+            });
+        } 
     }
 
     handleChange(event){
