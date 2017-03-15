@@ -5,6 +5,7 @@ import 'firebase/auth';
 import 'firebase/database'
 import { Form, Button, Input, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
+import { Link } from 'react-router';
 
 
 //Comment input box
@@ -102,6 +103,7 @@ class PetPage extends Component {
       comments: [],
       user: { signedIn: 0, displayName: "", photoURL: "" },
       pet: {name: "", imageURL: ""},
+      petExists: false
     }
   }
 
@@ -124,8 +126,15 @@ class PetPage extends Component {
 
     //Get pet information from db
     firebase.database().ref().child('/pets/'+this.props.params.id).once('value', (snapshot) => {
-      this.setState({pet: {name: snapshot.val().name, imageURL: snapshot.val().imageURL}});
-    })
+       //Check if a pet at this Id exists
+        if(snapshot.exists()){
+            //Set state with pet info
+          this.setState({petExists: true, pet: {name: snapshot.val().name, imageURL: snapshot.val().imageURL}});
+        }else{
+            //If pet does not exist
+            this.setState({petExists: false});
+        }
+      });
 
     //Runs once for each child in posts node
     firebase.database().ref().child('/comments/'+this.props.params.id).on('child_added', (snapshot) => {
@@ -144,20 +153,26 @@ class PetPage extends Component {
 
   // Render the app
   render() {
-    return (
-      <div className="App">
-          <h1 className="title">{this.state.pet.name}</h1>
-        <div className="image-container">
-          <img className="bolt-image mui--z1" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
+    if (this.state.petExists){
+      return (
+        <div className="App">
+            <h1 className="title">{this.state.pet.name}</h1>
+          <div className="image-container">
+            <img className="bolt-image mui--z1" src={this.state.pet.imageURL} alt={this.state.pet.name}></img>
+          </div>
+          {this.state.user.signedIn? 
+          (<InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} petId={this.props.params.id} />)
+          : (<div className="pet-sign-in-request">Please sign in to leave a comment</div>)}
+          <div className="comment-container">
+            {this.state.comments.slice().reverse()}
+          </div>
         </div>
-        {this.state.user.signedIn? 
-        (<InputBox userDisplayName={this.state.user.displayName} userPhotoURL={this.state.user.photoURL} petId={this.props.params.id} />)
-        : (<div className="pet-sign-in-request">Please sign in to leave a comment</div>)}
-        <div className="comment-container">
-          {this.state.comments.slice().reverse()}
-        </div>
-      </div>
-    );
+      );
+    }else{
+      return (
+        <div className="no-pet">We're sorry but this pet does not exist. Why don't you <Link to="/add-pet">add it to the site?</Link></div>
+      );
+    }
   }
 }
 
