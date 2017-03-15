@@ -14,3 +14,33 @@
     max-width: 640px;
     margin: auto;
 }
+
+.error-message{
+    width: 100%;
+    color: red;
+    padding: 5px;
+    animation: error-message 0.5s, appear 0.5s;
+}
+
+@keyframes error-message {
+    from {background-color: red;}
+    to {background-color: white;}
+    
+}
+
+.file-input{
+    width: 100%;
+    margin-bottom: 20px;
+    padding-top: 15px;
+    height: 32px;
+}
+
+.appear{
+    animation-name: appear;
+    animation-duration: 0.5s;
+}
+
+@keyframes appear{
+     from {opacity: 0;}
+     to {opacity: 1;}
+     }
