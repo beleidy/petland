@@ -66,7 +66,7 @@ class AddPet extends Component{
             //2a. If image is a link
             if (!this.state.isFileUpload){
                 //Replace http with https in imageURL
-                const secureImage = this.state.imageURL.replace("http", "https");
+                const secureImage = this.state.imageURL.replace("http:", "https:");
                 console.debug("Image Secured");
                 console.debug(secureImage);
 
@@ -182,8 +182,6 @@ class AddPet extends Component{
         }else{
             this.setState({isFileUpload: 1});
         }
-
-        this.setState({errorMessage: "You have made a big mistake, please fix it."});
 
     }
 
