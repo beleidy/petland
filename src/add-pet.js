@@ -75,19 +75,22 @@ class AddPet extends Component{
                     //Check if link is of type image
                     var linkIsImage = response.headers.get("content-type").startsWith("image");
                     if (linkIsImage){
-                        console.debug("Link is an image" + linkIsImage);
+                        console.debug("Link is an image: " + linkIsImage);
                         return response.blob();    
                     }
                     else{
                         this.setState({errorMessage: "Sorry, your link does not point to an image, please check and try again."});
+                        console.log("Fetch result is not an image");
                         return null;
                     }
                 }).then((imageBlob) => {
-                    this.startUpload(imageBlob);
+                    //If the image blob is null, return null
+                    if (!imageBlob) return null;
                     console.debug("Assigned fetch blob");
+                    this.startUpload(imageBlob);
                 }).catch((error) => {
                     console.log(error);
-                    this.setState({errorMessage: "Sorry, your link did not work - are you sure it is a direct link to the image?"});
+                    this.setState({errorMessage: "Sorry, your link did not work - are you sure it points to an image?"});
                     return null;
                 });
             }else{
