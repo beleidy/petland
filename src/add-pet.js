@@ -201,8 +201,10 @@ class AddPet extends Component{
                     <legend>Add my pet</legend>
                     {this.state.errorMessage ? (<div className="error-message">{this.state.errorMessage}</div>): ""}
                     <Input name="petName" required={true} label="Your pet's name" floatingLabel={true} onChange={this.handleChange} value={this.state.petName} />
-                    <Radio name="fileSource" label="Upload file" value="file" defaultChecked={true} onClick={this.handleRadioClick} />
-                    <Radio name="fileSource" label="Link to image" value="link" onClick={this.handleRadioClick} />
+                    <div className="radio-container">
+                    <Radio className="add-pet-radio" name="fileSource" label="Upload image" value="file" defaultChecked={true} onClick={this.handleRadioClick} />
+                    <Radio className="add-pet-radio" name="fileSource" label="Link to image" value="link" onClick={this.handleRadioClick} />
+                    </div>
                     {this.state.isFileUpload ?
                     (<input className="file-input appear" name="imageFile" required={true} type="file" accept="image/gif, image/jpeg" label="Select image to upload" onChange={this.handleFileChange} />)
                     : (<Input className="url-input appear" name="imageURL" required={true} type={'url'} label="Link to its image" floatingLabel={true} onChange={this.handleChange} value={this.state.imageURL} />)}
