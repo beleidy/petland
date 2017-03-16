@@ -103,7 +103,7 @@ class PetPage extends Component {
       comments: [],
       user: { signedIn: 0, displayName: "", photoURL: "" },
       pet: {name: "", imageURL: ""},
-      petExists: false
+      petExists: true
     }
   }
 
