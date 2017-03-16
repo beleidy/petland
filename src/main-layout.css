@@ -7,7 +7,8 @@
 .nav-bar{
     position: fixed;
     width:100%;
-    z-index: 10000;
+    z-index: 2;
+    backface-visibility: hidden;
 }
 .mui-appbar{
     background-color: #FF7043;
@@ -99,7 +100,7 @@
 .view-container{
     max-width: 960px;
     margin: auto;
-    padding-top: 65px;
+    padding: 65px 15px 0px;
 }
 
 .add-pet-fab{
@@ -107,4 +108,5 @@
     bottom: 1em;
     right: 1em;
     font-size: 1.5em;
+    backface-visibility: hidden;
 }
