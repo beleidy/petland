@@ -67,8 +67,6 @@ class AddPet extends Component{
             if (!this.state.isFileUpload){
                 //Replace http with https in imageURL
                 const secureImage = this.state.imageURL.replace("http:", "https:");
-                console.debug("Image Secured");
-                console.debug(secureImage);
 
                 //Use fetch api to check that the url is an image 
                 fetch(secureImage).then((response) => {
@@ -80,16 +78,13 @@ class AddPet extends Component{
                     }
                     else{
                         this.setState({errorMessage: "Sorry, your link does not point to an image, please check and try again."});
-                        console.log("Fetch result is not an image");
                         return null;
                     }
                 }).then((imageBlob) => {
                     //If the image blob is null, return null
                     if (!imageBlob) return null;
-                    console.debug("Assigned fetch blob");
                     this.startUpload(imageBlob);
                 }).catch((error) => {
-                    console.log(error);
                     this.setState({errorMessage: "Sorry, your link did not work - are you sure it points to an image?"});
                     return null;
                 });
