@@ -6,6 +6,7 @@ import 'firebase/database'
 import { Form, Button, Input, Panel } from 'muicss/react';
 import '../node_modules/muicss/dist/css/mui.css';
 import { Link } from 'react-router';
+import Moment from 'moment';
 
 
 //Comment input box
@@ -43,7 +44,8 @@ class InputBox extends Component {
       authorId: fuser.uid,
       comment: this.state.value.slice(),
       userDisplayName: this.props.userDisplayName,
-      userPhotoURL: this.props.userPhotoURL
+      userPhotoURL: this.props.userPhotoURL,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
     };
 
     // generate a new object in the posts node
@@ -87,6 +89,8 @@ class CommentBox extends Component {
         <div className="comment-box-author">
           <img className="comment-box-user-image" src={this.props.userPhotoURL} alt="Comment author"></img>
           <p className="comment-box-name caption">{this.props.userDisplayName}</p>
+          {this.props.timestamp? 
+          (<div className="comment-timestamp">{Moment(this.props.timestamp).calendar()}</div>) :""}
         </div>
       </Panel>
     );
@@ -143,7 +147,8 @@ class PetPage extends Component {
       const commentText = snapshot.val().comment;
       const userDisplayName = snapshot.val().userDisplayName;
       const userPhotoURL = snapshot.val().userPhotoURL;
-      const reactElement = <CommentBox key={snapshot.key} comment={commentText} userDisplayName={userDisplayName} userPhotoURL={userPhotoURL} />;
+      const timestamp = snapshot.val().timestamp;
+      const reactElement = <CommentBox key={snapshot.key} comment={commentText} userDisplayName={userDisplayName} userPhotoURL={userPhotoURL} timestamp={timestamp}/>;
       
       //Take previous state and concat the new comment to it
       this.setState((prevState, props) => {return {comments: prevState.comments.concat(reactElement)};});
