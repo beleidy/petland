@@ -34,8 +34,17 @@ constructor(){
         firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // User is signed in.
-            var currentUser = firebase.auth().currentUser
-            this.setState({ user: {signedIn: 1, displayName: currentUser.displayName, photoURL: currentUser.photoURL } });
+            var currentUser = firebase.auth().currentUser;
+
+            //We check the provider user information and update their firebase user info used in the rest
+            //of the site.
+            currentUser.updateProfile({
+                displayName: currentUser.providerData[0].displayName,
+                photoURL: currentUser.providerData[0].photoURL
+            });
+            
+            //Set the state for signed in user
+            this.setState({ user: {signedIn: 1, displayName: currentUser.displayName, photoURL: currentUser.photoURL } });  
         } else {
 
         // No user is signed in.
