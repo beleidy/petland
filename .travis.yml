@@ -8,10 +8,12 @@ branches:
 install:
 - npm set progress=false
 - npm install
-- npm install -g firebase-tools
 script:
 - npm run build
-- firebase deploy --token "$FIREBASE_TOKEN"
+deploy:
+  provider: firebase
+  token:
+    secure: $FIREBASE_TOKEN
 notifications:
   slack:
     secure: voSVCP5LOWGinc7S9Ev/AGnrmk4swvdvgAgdIWvrVqhsGooH03mUHLg/UHBzCA/d9/P0ggO7Wc0fqtZvaZEQuzZi9tYN/hsE5H3CVF1SAAqGoMUblls00M8Qf6Rqmg/hEigoXpsInhlTWtcXCrRpNPTEh95xrTBrjpTsa5SY7GXtNvayVgmGWvLM9iYIQyCXibEb0LkZztM+Qc9AYvim5agdLTSAcGXvv3SGFNRvOM20JIMk9pn+rsRCzcTc2X8kP/G/1UDSsU+UAozQoCqFCXN5zUdLweqDO9+Ll99MRYZHqRM+2X/dq78vSnQAZna1s9OqYmGTxg9N10ZHvqaoecfIkOl0pYuMVCLciAId+bffjSmYnAu6xIk3Gtuuyz61mhHOVrdNnyTSZ0Ik1vGe1SKkmB8Ro03P+EuQh/H95Nw+X+CJeeZddmo3v6E2vY2xDgkgK67nMGU/l6kGlQu79f9N0QfZMZWS9vaU5kRSAahNR1qECccYCJWwpVDgJsJDCt5eZwm1z49J7mSdMo/qrRNfxy+YhztxhfV7kWrrBuk+Edq/Tb1ZenIZHpJ8D5Byy+iyHcpvS/4RAiXI+BLsQWqPSwj6huuoDR+EOWakfIl4CzCe6vcyeYJKCaqbrhHwuzuyla863v1FFzYgwZb/FwE2eRMoMpU6FLHwxkskDNs=
