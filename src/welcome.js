@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import './welcome.css';
 import { Link } from 'react-router';
-import '../node_modules/muicss/dist/css/mui.css';
 import * as firebase from "firebase";
-// import 'firebase/auth';
-import 'firebase/database'
+import 'firebase/database';
 
-class PetPreview extends Component{
-    render(){
-        let s = {backgroundImage: "url("+this.props.petImageURL+")"};
+import './css/welcome.css';
+import '../node_modules/muicss/dist/css/mui.css';
+
+class PetPreview extends Component {
+    render() {
+        let s = { backgroundImage: "url("+this.props.petImageURL+")" };
 
         return(
             <Link className="pet-card-link" to={"/pet/"+this.props.petId}>
@@ -19,34 +19,34 @@ class PetPreview extends Component{
         )
     }
 }
-class Welcome extends Component{
+
+class Welcome extends Component {
     constructor(){
         super();
-        this.state={
+        this.state = {
             pets: []
         };
     }
     
-    componentDidMount(){
+    componentDidMount() {
         firebase.database().ref().child('/pets/').on('child_added', (snapshot) => {
-            //Store the pet details in local consts
+            // Store the pet details in local consts
             const petName = snapshot.val().name;
             const petImageURL = snapshot.val().imageURL;
             // Generate the react element holding the pet
-            var reactElement = <PetPreview key={snapshot.key} petId={snapshot.key} petName={petName} petImageURL={petImageURL} /> 
-            
-            //Add it to the previous state
+            var reactElement = <PetPreview key={ snapshot.key } petId={ snapshot.key } petName={ petName } petImageURL={ petImageURL } /> 
+            // Add it to the previous state
             this.setState((prevState, props) => {return {pets: prevState.pets.concat(reactElement)};});
         })
     }
 
-    render(){
+    render() {
         return(
             <div className="welcome-container">
-            {this.state.pets.slice().reverse()}
+                { this.state.pets.slice().reverse() }
             </div>
         )
     }
 }
 
-export {Welcome as default};
+export { Welcome as default };
