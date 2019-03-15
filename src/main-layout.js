@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import * as firebase from "firebase";
 import 'firebase/auth';
 import * as firebaseui from "firebaseui";
