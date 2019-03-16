@@ -22,11 +22,11 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
     <Router>
-        <Route component={MainLayout}>
+        <MainLayout>
             <Route path="/" component={Welcome} />
             <Route path="/pet/:id" component={PetPage} />
             <Route path="/add-pet" component={AddPet} />
-        </Route>
+        </MainLayout>
     </Router>,
     document.getElementById("root")
 );
