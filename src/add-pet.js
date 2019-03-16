@@ -203,7 +203,7 @@ class AddPet extends Component {
                     // Reset state
                     this.setState({ petName: "", imageURL: "" });
                     // Navigate user back to welcome page
-                    // this.props.history.push("/pet/" + newKey);
+                    this.props.history.push("/pet/" + newKey);
                 });
             }
         );
