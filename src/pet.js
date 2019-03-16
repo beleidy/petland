@@ -157,7 +157,7 @@ class PetPage extends Component {
         firebase
             .database()
             .ref()
-            .child("/pets/" + this.props.params.id)
+            .child("/pets/" + this.props.match.params.id)
             .once("value", snapshot => {
                 // Check if a pet at this Id exists
                 if (snapshot.exists()) {
@@ -179,7 +179,7 @@ class PetPage extends Component {
         firebase
             .database()
             .ref()
-            .child("/comments/" + this.props.params.id)
+            .child("/comments/" + this.props.match.params.id)
             .on("child_added", snapshot => {
                 // Take the comment and key from the db and put them in local consts
                 const commentText = snapshot.val().comment;
@@ -222,7 +222,7 @@ class PetPage extends Component {
                         <InputBox
                             userDisplayName={this.state.user.displayName}
                             userPhotoURL={this.state.user.photoURL}
-                            petId={this.props.params.id}
+                            petId={this.props.match.params.id}
                         />
                     ) : (
                         <div className="pet-sign-in-request">

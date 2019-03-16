@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 
 import "./css/index.css";
 import PetPage from "./pet";
@@ -23,7 +23,7 @@ firebase.initializeApp(config);
 ReactDOM.render(
     <Router>
         <MainLayout>
-            <Route path="/" component={Welcome} />
+            <Route exact path="/" component={Welcome} />
             <Route path="/pet/:id" component={PetPage} />
             <Route path="/add-pet" component={AddPet} />
         </MainLayout>

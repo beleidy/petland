@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import { Form, Button, Input, Radio } from "muicss/react";
@@ -189,16 +189,21 @@ class AddPet extends Component {
                         ownerId: ownerId
                     };
                     //Push new pet information to firebase
-                    var dbPush = firebase
+                    var newKey = firebase
                         .database()
                         .ref()
-                        .child("/pets/")
-                        .push(dbNewPet);
-                    var newKey = dbPush.key;
+                        .child("pets")
+                        .push().key;
+                    const updates = {};
+                    updates["/pets/" + newKey] = dbNewPet;
+                    firebase
+                        .database()
+                        .ref()
+                        .update(updates);
                     // Reset state
                     this.setState({ petName: "", imageURL: "" });
                     // Navigate user back to welcome page
-                    this.props.history.push("/pet/" + newKey);
+                    // this.props.history.push("/pet/" + newKey);
                 });
             }
         );
