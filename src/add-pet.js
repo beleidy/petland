@@ -176,28 +176,30 @@ class AddPet extends Component {
             () => {
                 // When upload is done and successful
                 console.debug("Upload Success!");
-                console.debug(uploadTask.snapshot.downloadURL);
-                imageDbLink = uploadTask.snapshot.downloadURL;
+                storageFileRef.getDownloadURL().then(downloadURL => {
+                    console.debug(downloadURL);
+                    imageDbLink = downloadURL;
 
-                // 4. Create the db object, push to database and navigate user to new pet page
+                    // 4. Create the db object, push to database and navigate user to new pet page
 
-                // Create object to be passed to firebase
-                const dbNewPet = {
-                    name: this.state.petName,
-                    imageURL: imageDbLink,
-                    ownerId: ownerId
-                };
-                //Push new pet information to firebase
-                var dbPush = firebase
-                    .database()
-                    .ref()
-                    .child("/pets/")
-                    .push(dbNewPet);
-                var newKey = dbPush.key;
-                // Reset state
-                this.setState({ petName: "", imageURL: "" });
-                // Navigate user back to welcome page
-                this.props.router.push("/pet/" + newKey);
+                    // Create object to be passed to firebase
+                    const dbNewPet = {
+                        name: this.state.petName,
+                        imageURL: imageDbLink,
+                        ownerId: ownerId
+                    };
+                    //Push new pet information to firebase
+                    var dbPush = firebase
+                        .database()
+                        .ref()
+                        .child("/pets/")
+                        .push(dbNewPet);
+                    var newKey = dbPush.key;
+                    // Reset state
+                    this.setState({ petName: "", imageURL: "" });
+                    // Navigate user back to welcome page
+                    this.props.history.push("/pet/" + newKey);
+                });
             }
         );
     }
