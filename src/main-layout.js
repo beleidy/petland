@@ -85,12 +85,12 @@ function MainLayout(props) {
                     {signedIn ? (
                       <div>
                         <span className="nav-user-name">{displayName}</span> -{" "}
-                        <Link
-                          className="nav-sign-out-link"
+                        <Button
+                          // className="nav-sign-out-link"
                           onClick={userSignOut}
                         >
                           Sign out
-                        </Link>
+                        </Button>
                       </div>
                     ) : (
                       ""
