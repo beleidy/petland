@@ -7,9 +7,11 @@ cache:
 staging:
   only:
     - staging
+  environment:
+    name: staging
   script:
     - npm install -g firebase-tools
-    - firebase use staging
+    - firebase use --token "$FIREBASE_DEPLOY_KEY" staging
     - firebase setup:web --json > firebase-js-config.json
     - npm install
     - npm run build
@@ -18,6 +20,8 @@ staging:
 production:
   only:
     - master
+  environment:
+    name: production
   script:
     - npm install -g firebase-tools
     - firebase use production
