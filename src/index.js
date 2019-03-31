@@ -1,32 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
-import * as firebase from "firebase";
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import firebase from "firebase/app";
 
-import './css/index.css';
-import PetPage from './pet';
-import Welcome from './welcome';
-import AddPet from './add-pet';
-import MainLayout from './main-layout';
+import "./css/index.css";
+import PetPage from "./pet";
+import Welcome from "./welcome";
+import AddPet from "./add-pet";
+import MainLayout from "./main-layout";
 
 // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCy8OwL_E1rrYfutk5vqLygz20RmGW-GBE",
-    authDomain: "petland-4b867.firebaseapp.com",
-    databaseURL: "https://petland-4b867.firebaseio.com",
-    storageBucket: "gs://petland-4b867.appspot.com/",
-    messagingSenderId: "784140166304"
-  };
+var config = {
+    apiKey: "AIzaSyDXSjkM4Jnc9KcU5ERfdTkrHRiy5Xh-EoU",
+    authDomain: "petland-dev.firebaseapp.com",
+    databaseURL: "https://petland-dev.firebaseio.com",
+    projectId: "petland-dev",
+    storageBucket: "petland-dev.appspot.com",
+    messagingSenderId: "738118892814"
+};
 firebase.initializeApp(config);
 
-
 ReactDOM.render(
-    <Router history={browserHistory}>
-        <Route component={MainLayout}>
-            <Route path="/" component={Welcome} />
+    <Router>
+        <MainLayout>
+            <Route exact path="/" component={Welcome} />
             <Route path="/pet/:id" component={PetPage} />
             <Route path="/add-pet" component={AddPet} />
-        </Route>
+        </MainLayout>
     </Router>,
-    document.getElementById('root')
+    document.getElementById("root")
 );

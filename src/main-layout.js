@@ -1,44 +1,32 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import * as firebase from "firebase";
-import 'firebase/auth';
+import "firebase/auth";
 import * as firebaseui from "firebaseui";
-import { Button, Appbar } from 'muicss/react';
+import { Button, Appbar } from "muicss/react";
 
-import './css/main-layout.css';
-import './css/firebaseui.css';
-import '../node_modules/muicss/dist/css/mui.css';
+import "./css/main-layout.css";
+import "./css/firebaseui.css";
+import "../node_modules/muicss/dist/css/mui.css";
 
-// Required for debugging using why did you update
-if (process.env.NODE_ENV !== 'production') {
-    const { whyDidYouUpdate } = require('why-did-you-update');
-    whyDidYouUpdate(React);
-}
+function MainLayout(props) {
+    const [displayName, setDisplayName] = useState("");
+    const [signedIn, setSignedIn] = useState(0);
 
-class MainLayout extends Component {
-    constructor() {
-        super();
-        this.state = {
-            user: {displayName: "", photoURL: "", signedIn: 0}
-        };
-    }
-
-    componentDidMount() {
+    useEffect(() => {
         // Initialise the firebase auth app
         var uiConfig = {
-            signInSuccessUrl: '#',
-            signInOptions: [
-                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-            ],
+            signInSuccessUrl: "#",
+            signInOptions: [firebase.auth.FacebookAuthProvider.PROVIDER_ID],
             // Terms of service url.
-            tosUrl: '#'
-        };     
-    
+            tosUrl: "#"
+        };
+
         // Initialize the FirebaseUI Widget using Firebase.
         var ui = new firebaseui.auth.AuthUI(firebase.auth());
 
         // Set observer on user state
-        firebase.auth().onAuthStateChanged((user) => {
+        firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 // User is signed in.
                 var currentUser = firebase.auth().currentUser;
@@ -49,58 +37,97 @@ class MainLayout extends Component {
                     photoURL: currentUser.providerData[0].photoURL
                 });
                 // Set the state for signed in user
-                this.setState({ user: {signedIn: 1, displayName: currentUser.displayName, photoURL: currentUser.photoURL } });  
+                setSignedIn(1);
+                setDisplayName(currentUser.displayName);
             } else {
                 // No user is signed in.
-                this.setState({ user: { signedIn: 0, displayName: "", photoURL: "" } });
-                ui.start('#firebaseui-auth-container', uiConfig);
+                setSignedIn(0);
+                setDisplayName("");
+                ui.start("#firebaseui-auth-container", uiConfig);
             }
         });
+    }, []);
 
-    }
-
-    userSignOut = () => {
+    const userSignOut = () => {
         firebase.auth().signOut();
-    }
+    };
 
-    render() {
-        const navTableStyle = {verticalAlign: 'middle'};
-        const navLeft = {justifyContent: "left"};
-        const navRight = {justifyContent: "right"};
-        
-        return(
-            <div className="layout-container">
-                <div className="nav-bar">
-                    <Appbar>
-                        <table className="nav-table" width="100%" style={ navTableStyle } >
-                            <tbody>
-                              <tr>
-                                <td className="petland-title mui--appbar-height" style={ navLeft }>
-                                <Link className="logo" to="/">Petland
-                                </Link>
+    const navTableStyle = { verticalAlign: "middle" };
+    const navLeft = { justifyContent: "left" };
+    const navRight = { justifyContent: "right" };
+
+    return (
+        <div className="layout-container">
+            <div className="nav-bar">
+                <Appbar>
+                    <table
+                        className="nav-table"
+                        width="100%"
+                        style={navTableStyle}
+                    >
+                        <tbody>
+                            <tr>
+                                <td
+                                    className="petland-title mui--appbar-height"
+                                    style={navLeft}
+                                >
+                                    <Link className="logo" to="/">
+                                        Petland
+                                    </Link>
                                 </td>
-                                <td className="mui--appbar-height" style={navRight}>
+                                <td
+                                    className="mui--appbar-height"
+                                    style={navRight}
+                                >
                                     <div className="nav-right-container">
-                                        <div ><Link className="nav-link" activeClassName="active-navbar-link" to="/add-pet">Add Pet</Link></div>
-                                        { this.state.user.signedIn ? 
-                                            (<div><span className="nav-user-name">{this.state.user.displayName}</span> - <a className="nav-sign-out-link" onClick={this.userSignOut}>Sign out</a></div>) 
-                                            : "" 
-                                        }
-                                        { this.state.user.signedIn ? "" : (<div id="firebaseui-auth-container" className="mui--appbar-height"></div>) }
+                                        <div>
+                                            <Link
+                                                className="nav-link"
+                                                activeClassName="active-navbar-link"
+                                                to="/add-pet"
+                                            >
+                                                Add Pet
+                                            </Link>
+                                        </div>
+                                        {signedIn ? (
+                                            <div>
+                                                <span className="nav-user-name">
+                                                    {displayName}
+                                                </span>{" "}
+                                                -{" "}
+                                                <a
+                                                    className="nav-sign-out-link"
+                                                    onClick={userSignOut}
+                                                >
+                                                    Sign out
+                                                </a>
+                                            </div>
+                                        ) : (
+                                            ""
+                                        )}
+                                        {signedIn ? (
+                                            ""
+                                        ) : (
+                                            <div
+                                                id="firebaseui-auth-container"
+                                                className="mui--appbar-height"
+                                            />
+                                        )}
                                     </div>
                                 </td>
-                             </tr>
-                            </tbody>
-                        </table>
-                    </Appbar>
-                </div>
-                <div className="view-container">
-                    { this.props.children }
-                </div>
-               <Link to="/add-pet" activeClassName="active-fab"><Button className="add-pet-fab" variant="fab" color="primary">+</Button></Link>
+                            </tr>
+                        </tbody>
+                    </table>
+                </Appbar>
             </div>
-        );
-    }
+            <div className="view-container">{props.children}</div>
+            <Link to="/add-pet" activeClassName="active-fab">
+                <Button className="add-pet-fab" variant="fab" color="primary">
+                    +
+                </Button>
+            </Link>
+        </div>
+    );
 }
 
 export default MainLayout;
