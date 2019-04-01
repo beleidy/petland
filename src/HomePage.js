@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import firebase from "firebase/app";
 import "firebase/database";
 
-import "./css/welcome.css";
-import "../node_modules/muicss/dist/css/mui.css";
+// import "./css/welcome.css";
+// import "../node_modules/muicss/dist/css/mui.css";
 
 function PetCard(props) {
   let s = { backgroundImage: "url(" + props.petImageURL + ")" };

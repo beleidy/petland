@@ -5,9 +5,9 @@ import "firebase/auth";
 import * as firebaseui from "firebaseui";
 import { Button, Appbar } from "muicss/react";
 
-import "./css/main-layout.css";
+// import "./css/main-layout.css";
 import "./css/firebaseui.css";
-import "../node_modules/muicss/dist/css/mui.css";
+// import "../node_modules/muicss/dist/css/mui.css";
 
 function MainLayout(props) {
   const [displayName, setDisplayName] = useState("");
