@@ -48,8 +48,8 @@ function HomePage(props) {
           <PetCard
             key={pet.key}
             petId={pet.key}
-            petName={name}
-            petImageURL={imageURL}
+            petName={pet.name}
+            petImageURL={pet.imageURL}
           />
         ))}
     </div>
