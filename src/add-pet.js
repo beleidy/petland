@@ -3,10 +3,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import { v4 as uuidv4 } from "uuid";
-// import { Form, Button, Input, Radio } from "muicss/react";
-
-// import "./css/add-pet.css";
-// import "../node_modules/muicss/dist/css/mui.css";
 
 function AddPet(props) {
   const [petName, setPetName] = useState("");
