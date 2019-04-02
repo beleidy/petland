@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Form, Button, Input, Radio } from "muicss/react";
+// import { Form, Button, Input, Radio } from "muicss/react";
 
 // import "./css/add-pet.css";
 // import "../node_modules/muicss/dist/css/mui.css";
@@ -207,66 +207,93 @@ function AddPet(props) {
   return (
     <div className="add-pet-container">
       {isSignedIn ? (
-        <Form className="add-pet-form" onSubmit={handleSubmit}>
-          <legend>Add my pet</legend>
+        <form
+          className="w-5/6 mx-auto bg-my-blue px-10 py-10 flex flex-wrap text-content text-content-color"
+          onSubmit={handleSubmit}
+        >
+          {/* <legend className="w-full text-center font-bold">Add my pet</legend> */}
           {errorMessage ? (
             <div className="error-message">{errorMessage}</div>
           ) : (
             ""
           )}
-          <Input
-            name="petName"
-            required={true}
-            label="Your pet's name"
-            floatingLabel={true}
-            onChange={e => setPetName(e.target.value)}
-            value={petName}
-          />
-          <div className="radio-container">
-            <Radio
-              className="add-pet-radio"
-              name="fileSource"
-              label="Upload image"
-              value="file"
-              defaultChecked={true}
-              onClick={handleRadioClick}
-            />
-            <Radio
-              className="add-pet-radio"
-              name="fileSource"
-              label="Link to image"
-              value="link"
-              onClick={handleRadioClick}
+          <div className="w-full flex my-4">
+            <label className="w-1/3 text-right px-5">Your pet's name</label>
+            <input
+              className="w-2/3 px-3 py-1"
+              name="petName"
+              required={true}
+              onChange={e => setPetName(e.target.value)}
+              value={petName}
             />
           </div>
+          <div className="w-full flex">
+            <div className="w-1/2 text-right my-2">
+              <input
+                type="radio"
+                className="mx-2"
+                name="fileSource"
+                value="file"
+                defaultChecked={true}
+                onClick={handleRadioClick}
+              />
+              <label className="">Upload image</label>
+            </div>
+            <div className="w-1/2 text-center my-2">
+              <input
+                type="radio"
+                className="mx-2"
+                name="fileSource"
+                value="link"
+                onClick={handleRadioClick}
+              />
+              <label className="">Link to image</label>
+            </div>
+          </div>
+
           {isFileUpload ? (
-            <input
-              className="file-input appear"
-              name="imageFile"
-              required={true}
-              type="file"
-              accept="image/gif, image/jpeg"
-              label="Select image to upload"
-              onChange={handleFileChange}
-            />
+            <div className="w-full flex my-4 justify-end">
+              <label
+                for="imageFile"
+                className="w-2/3 py-1 bg-my-green text-center rounded shadow hover:shadow-md focus:bg-my-orange"
+              >
+                {uploadFile ? uploadFile.name : "Click here to select file"}
+              </label>
+              <input
+                className=""
+                name="imageFile"
+                id="imageFile"
+                required={true}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </div>
           ) : (
-            <Input
-              className="url-input appear"
-              name="imageURL"
-              required={true}
-              type={"url"}
-              label="Link to its image"
-              floatingLabel={true}
-              onChange={e => setImageURL(e.target.value)}
-              value={imageURL}
-            />
+            <div className="w-full flex my-4 justify-end">
+              <input
+                className="w-2/3 px-3 py-1 text-grey-darker"
+                name="imageURL"
+                required={true}
+                type={"url"}
+                placeholder="link to your pet's photo"
+                onChange={e => setImageURL(e.target.value)}
+                value={imageURL}
+              />
+            </div>
           )}
-          <Button variant="raised" color={"primary"}>
-            Add my pet
-          </Button>
-        </Form>
+          <div className="w-full flex justify-end">
+            <div className="w-2/3 my-4 text-center">
+              <button className="bg-my-green shadow hover:shadow-md px-3 py-2 rounded-lg">
+                Add my pet
+              </button>
+            </div>
+          </div>
+        </form>
       ) : (
-        <div className="sign-in-request">Please sign in to add a pet</div>
+        <div className="w-1/3 mx-auto bg-my-blue font-bold my-4 py-4 px-2 text-center">
+          Please sign in to add a pet
+        </div>
       )}
     </div>
   );
