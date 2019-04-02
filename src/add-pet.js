@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
+import { v4 as uuidv4 } from "uuid";
 // import { Form, Button, Input, Radio } from "muicss/react";
 
 // import "./css/add-pet.css";
@@ -40,7 +41,6 @@ function AddPet(props) {
         Note: steps 3 and 4 are described in a function that is only invoked once the image blob is ready to avoid async issues.
         **********************************************************************************************/
 
-    // Prevent default submit event to stop page refreshing and url changing
     event.preventDefault();
 
     // 1. If there is no user signed in
@@ -51,9 +51,6 @@ function AddPet(props) {
     }
     // 1. If the user is signed in
     else {
-      // Declare variable where we will store the image blob
-      var imageBlob = {};
-
       // 2a. If image is a link
       if (!isFileUpload) {
         //Replace http with https in imageURL
@@ -62,12 +59,11 @@ function AddPet(props) {
         // Use fetch api to check that the url is an image
         fetch(secureImage)
           .then(response => {
-            //Check if link is of type image
-            var linkIsImage = response.headers
+            // Check if link is of type image
+            const linkIsImage = response.headers
               .get("content-type")
               .startsWith("image");
             if (linkIsImage) {
-              console.debug("Link is an image: " + linkIsImage);
               return response.blob();
             } else {
               setErrorMessage(
@@ -89,15 +85,10 @@ function AddPet(props) {
           });
       } else {
         // 2b. If Image is a file upload
-        console.debug("Image is a file upload");
-
         const fileIsImage = uploadFile.type.startsWith("image");
         if (fileIsImage) {
-          console.debug("Upload file type is an image");
-
           // Asign the file object to imageBlob variable
-          imageBlob = uploadFile;
-          startUpload(imageBlob);
+          startUpload(uploadFile);
         } else {
           // Display error and abort
           setErrorMessage(
@@ -113,16 +104,7 @@ function AddPet(props) {
     // 3. Now we have an image blob and it is time to upload it
 
     // Generate a random file name
-    const fileName = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-      /[xy]/g,
-      function(c) {
-        /* eslint-disable */
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        /* eslint-enable */
-        return v.toString(16);
-      }
-    );
+    const fileName = uuidv4();
 
     // Create a storage bucket root refrence
     const storageRootRef = firebase.storage().ref();
@@ -134,11 +116,7 @@ function AddPet(props) {
     const storageFileRef = storageRootRef.child(ownerId + "/" + fileName);
 
     // Ask firebase to upload the file
-    console.log("Upload about to start");
     var uploadTask = storageFileRef.put(imageBlob);
-
-    // Declare variable where we will store the download link
-    var imageDbLink = "";
 
     // Track file upload status in console, can be used later to animate a progress bar
     uploadTask.on(
@@ -159,14 +137,12 @@ function AddPet(props) {
         console.debug("Upload Success!");
         storageFileRef.getDownloadURL().then(downloadURL => {
           console.debug(downloadURL);
-          imageDbLink = downloadURL;
-
           // 4. Create the db object, push to database and navigate user to new pet page
 
           // Create object to be passed to firebase
           const dbNewPet = {
             name: petName,
-            imageURL: imageDbLink,
+            imageURL: downloadURL,
             ownerId: ownerId
           };
           //Push new pet information to firebase
