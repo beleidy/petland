@@ -9,7 +9,7 @@ import "./css/styles.css";
 import PetPage from "./pet";
 import HomePage from "./HomePage";
 import AddPet from "./add-pet";
-import MainLayout from "./main-layout";
+import Navigation from "./Navigation";
 
 // Initialize Firebase
 var config = firebaseConfig.result;
@@ -17,11 +17,12 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
   <Router>
-    <MainLayout>
+    <div className="container mx-auto">
+      <Route path="/" component={Navigation} />
       <Route exact path="/" component={HomePage} />
       <Route path="/pet/:id" component={PetPage} />
       <Route path="/add-pet" component={AddPet} />
-    </MainLayout>
+    </div>
   </Router>,
   document.getElementById("root")
 );

@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 import firebase from "firebase/app";
 import "firebase/database";
 
-// import "./css/welcome.css";
-// import "../node_modules/muicss/dist/css/mui.css";
-
 function PetCard(props) {
-  let s = { backgroundImage: "url(" + props.petImageURL + ")" };
-
   return (
-    <Link className="pet-card-link" to={"/pet/" + props.petId}>
-      <div className="pet-card mui--z3" style={s}>
-        <div className="pet-caption">
-          <span>{props.petName}</span>
+    <Link
+      className="w-64 h-48 mx-5 my-10 no-underline"
+      to={"/pet/" + props.petId}
+    >
+      <div
+        className="w-full h-full flex items-end rounded-lg bg-cover"
+        style={{ backgroundImage: `url(${props.petImageURL})` }}
+      >
+        <div className="w-full text-center text-content-color bg-grey-lighter">
+          {props.petName}
         </div>
       </div>
     </Link>
@@ -40,7 +41,7 @@ function HomePage(props) {
   }, []);
 
   return (
-    <div className="welcome-container">
+    <div className="container mx-auto flex flex-wrap justify-around">
       {pets
         .slice()
         .reverse()
