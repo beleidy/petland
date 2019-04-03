@@ -183,7 +183,6 @@ function AddPet(props) {
           className="w-5/6 mx-auto bg-my-blue px-10 py-10 flex flex-wrap text-content text-content-color"
           onSubmit={handleSubmit}
         >
-          {/* <legend className="w-full text-center font-bold">Add my pet</legend> */}
           {errorMessage ? (
             <div className="error-message">{errorMessage}</div>
           ) : (
