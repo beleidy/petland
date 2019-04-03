@@ -26,11 +26,21 @@ function Navigation(props) {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // User is signed in.
-        var currentUser = firebase.auth().currentUser;
+        const currentUser = firebase.auth().currentUser;
         currentUser.updateProfile({
           displayName: currentUser.providerData[0].displayName,
           photoURL: currentUser.providerData[0].photoURL
         });
+
+        fetch(firebase.auth().currentUser.photoURL)
+          .then(response => response.blob())
+          .then(image => {
+            const storageRootRef = firebase.storage().ref();
+            const ownerId = firebase.auth().currentUser.uid;
+            const storageFileRef = storageRootRef.child(`${ownerId}/userPhoto`);
+            storageFileRef.put(image);
+          });
+
         // Set the state for signed in user
         setSignedIn(1);
         setDisplayName(currentUser.displayName);

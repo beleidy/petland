@@ -6,9 +6,9 @@ import firebase from "firebase/app";
 import firebaseConfig from "./firebase-js-config.json";
 import "./css/styles.css";
 import "./css/global.css";
-import PetPage from "./pet";
+import PetPage from "./PetPage";
 import HomePage from "./HomePage";
-import AddPet from "./add-pet";
+import AddPet from "./AddPet";
 import Navigation from "./Navigation";
 
 // Initialize Firebase
