@@ -204,21 +204,23 @@ function AddPet(props) {
                 type="radio"
                 className="mx-2"
                 name="fileSource"
+                id="image-upload-radio"
                 value="file"
                 defaultChecked={true}
                 onClick={handleRadioClick}
               />
-              <label className="">Upload image</label>
+              <label for="image-upload-radio">Upload image</label>
             </div>
             <div className="w-1/2 text-center my-2">
               <input
                 type="radio"
                 className="mx-2"
+                id="image-link-radio"
                 name="fileSource"
                 value="link"
                 onClick={handleRadioClick}
               />
-              <label className="">Link to image</label>
+              <label for="image-link-radio">Link to image</label>
             </div>
           </div>
 
