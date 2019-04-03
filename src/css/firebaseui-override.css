@@ -2,6 +2,19 @@
   padding: 0;
 }
 
+.firebaseui-idp-button {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.firebaseui-idp-list {
+  margin: 0;
+}
+
+.firebaseui-idp-list > .firebaseui-list-item {
+  margin-bottom: 0;
+}
+
 .firebaseui-card-footer {
   padding: 0;
 }
