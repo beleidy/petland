@@ -93,7 +93,9 @@ function PetPage(props) {
             petId={props.match.params.id}
           />
         ) : (
-          <div className="">Please sign in to leave a comment</div>
+          <div className="w-1/3 mx-auto bg-my-blue font-bold my-4 py-4 px-2 text-center">
+            Please sign in to leave a comment
+          </div>
         )}
         <div className="">
           {comments

@@ -184,7 +184,9 @@ function AddPet(props) {
           onSubmit={handleSubmit}
         >
           {errorMessage ? (
-            <div className="error-message">{errorMessage}</div>
+            <div className="w-1/3 mx-auto bg-my-blue font-bold my-4 py-4 px-2 text-center">
+              {errorMessage}
+            </div>
           ) : (
             ""
           )}
