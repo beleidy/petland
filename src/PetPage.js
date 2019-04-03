@@ -16,10 +16,14 @@ function PetPage(props) {
   const [petExists, setPetExists] = useState(true);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        const { displayName, photoURL } = firebase.auth().currentUser;
-
+        const { displayName, uid } = firebase.auth().currentUser;
+        const photoURL = await firebase
+          .storage()
+          .ref()
+          .child(`${uid}/userPhoto`)
+          .getDownloadURL();
         setUser({
           signedIn: 1,
           displayName,
