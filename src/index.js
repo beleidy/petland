@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import firebase from "firebase/app";
 
 import firebaseConfig from "./firebase-js-config.json";
-import "./css/index.css";
+import "./css/styles.css";
+import "./css/global.css";
 import PetPage from "./pet";
-import Welcome from "./welcome";
+import HomePage from "./HomePage";
 import AddPet from "./add-pet";
-import MainLayout from "./main-layout";
+import Navigation from "./Navigation";
 
 // Initialize Firebase
 var config = firebaseConfig.result;
@@ -16,11 +17,12 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
   <Router>
-    <MainLayout>
-      <Route exact path="/" component={Welcome} />
+    <div className="container mx-auto">
+      <Route path="/" component={Navigation} />
+      <Route exact path="/" component={HomePage} />
       <Route path="/pet/:id" component={PetPage} />
       <Route path="/add-pet" component={AddPet} />
-    </MainLayout>
+    </div>
   </Router>,
   document.getElementById("root")
 );

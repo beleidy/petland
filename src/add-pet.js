@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Form, Button, Input, Radio } from "muicss/react";
-
-import "./css/add-pet.css";
-import "../node_modules/muicss/dist/css/mui.css";
+import { v4 as uuidv4 } from "uuid";
 
 function AddPet(props) {
   const [petName, setPetName] = useState("");
@@ -40,7 +37,6 @@ function AddPet(props) {
         Note: steps 3 and 4 are described in a function that is only invoked once the image blob is ready to avoid async issues.
         **********************************************************************************************/
 
-    // Prevent default submit event to stop page refreshing and url changing
     event.preventDefault();
 
     // 1. If there is no user signed in
@@ -51,9 +47,6 @@ function AddPet(props) {
     }
     // 1. If the user is signed in
     else {
-      // Declare variable where we will store the image blob
-      var imageBlob = {};
-
       // 2a. If image is a link
       if (!isFileUpload) {
         //Replace http with https in imageURL
@@ -62,12 +55,11 @@ function AddPet(props) {
         // Use fetch api to check that the url is an image
         fetch(secureImage)
           .then(response => {
-            //Check if link is of type image
-            var linkIsImage = response.headers
+            // Check if link is of type image
+            const linkIsImage = response.headers
               .get("content-type")
               .startsWith("image");
             if (linkIsImage) {
-              console.debug("Link is an image: " + linkIsImage);
               return response.blob();
             } else {
               setErrorMessage(
@@ -89,15 +81,10 @@ function AddPet(props) {
           });
       } else {
         // 2b. If Image is a file upload
-        console.debug("Image is a file upload");
-
         const fileIsImage = uploadFile.type.startsWith("image");
         if (fileIsImage) {
-          console.debug("Upload file type is an image");
-
           // Asign the file object to imageBlob variable
-          imageBlob = uploadFile;
-          startUpload(imageBlob);
+          startUpload(uploadFile);
         } else {
           // Display error and abort
           setErrorMessage(
@@ -113,16 +100,7 @@ function AddPet(props) {
     // 3. Now we have an image blob and it is time to upload it
 
     // Generate a random file name
-    const fileName = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-      /[xy]/g,
-      function(c) {
-        /* eslint-disable */
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        /* eslint-enable */
-        return v.toString(16);
-      }
-    );
+    const fileName = uuidv4();
 
     // Create a storage bucket root refrence
     const storageRootRef = firebase.storage().ref();
@@ -134,11 +112,7 @@ function AddPet(props) {
     const storageFileRef = storageRootRef.child(ownerId + "/" + fileName);
 
     // Ask firebase to upload the file
-    console.log("Upload about to start");
     var uploadTask = storageFileRef.put(imageBlob);
-
-    // Declare variable where we will store the download link
-    var imageDbLink = "";
 
     // Track file upload status in console, can be used later to animate a progress bar
     uploadTask.on(
@@ -159,14 +133,12 @@ function AddPet(props) {
         console.debug("Upload Success!");
         storageFileRef.getDownloadURL().then(downloadURL => {
           console.debug(downloadURL);
-          imageDbLink = downloadURL;
-
           // 4. Create the db object, push to database and navigate user to new pet page
 
           // Create object to be passed to firebase
           const dbNewPet = {
             name: petName,
-            imageURL: imageDbLink,
+            imageURL: downloadURL,
             ownerId: ownerId
           };
           //Push new pet information to firebase
@@ -207,66 +179,94 @@ function AddPet(props) {
   return (
     <div className="add-pet-container">
       {isSignedIn ? (
-        <Form className="add-pet-form" onSubmit={handleSubmit}>
-          <legend>Add my pet</legend>
+        <form
+          className="w-5/6 mx-auto bg-my-blue px-10 py-10 flex flex-wrap text-content text-content-color"
+          onSubmit={handleSubmit}
+        >
           {errorMessage ? (
             <div className="error-message">{errorMessage}</div>
           ) : (
             ""
           )}
-          <Input
-            name="petName"
-            required={true}
-            label="Your pet's name"
-            floatingLabel={true}
-            onChange={e => setPetName(e.target.value)}
-            value={petName}
-          />
-          <div className="radio-container">
-            <Radio
-              className="add-pet-radio"
-              name="fileSource"
-              label="Upload image"
-              value="file"
-              defaultChecked={true}
-              onClick={handleRadioClick}
-            />
-            <Radio
-              className="add-pet-radio"
-              name="fileSource"
-              label="Link to image"
-              value="link"
-              onClick={handleRadioClick}
+          <div className="w-full flex my-4">
+            <label className="w-1/3 text-right px-5">Your pet's name</label>
+            <input
+              className="w-2/3 px-3 py-1"
+              name="petName"
+              required={true}
+              onChange={e => setPetName(e.target.value)}
+              value={petName}
             />
           </div>
+          <div className="w-full flex">
+            <div className="w-1/2 text-right my-2">
+              <input
+                type="radio"
+                className="mx-2"
+                name="fileSource"
+                id="image-upload-radio"
+                value="file"
+                defaultChecked={true}
+                onClick={handleRadioClick}
+              />
+              <label for="image-upload-radio">Upload image</label>
+            </div>
+            <div className="w-1/2 text-center my-2">
+              <input
+                type="radio"
+                className="mx-2"
+                id="image-link-radio"
+                name="fileSource"
+                value="link"
+                onClick={handleRadioClick}
+              />
+              <label for="image-link-radio">Link to image</label>
+            </div>
+          </div>
+
           {isFileUpload ? (
-            <input
-              className="file-input appear"
-              name="imageFile"
-              required={true}
-              type="file"
-              accept="image/gif, image/jpeg"
-              label="Select image to upload"
-              onChange={handleFileChange}
-            />
+            <div className="w-full flex my-4 justify-end">
+              <label
+                for="imageFile"
+                className="w-2/3 py-1 bg-my-green text-center rounded shadow hover:shadow-md focus:bg-my-orange"
+              >
+                {uploadFile ? uploadFile.name : "Click here to select file"}
+              </label>
+              <input
+                className=""
+                name="imageFile"
+                id="imageFile"
+                required={true}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </div>
           ) : (
-            <Input
-              className="url-input appear"
-              name="imageURL"
-              required={true}
-              type={"url"}
-              label="Link to its image"
-              floatingLabel={true}
-              onChange={e => setImageURL(e.target.value)}
-              value={imageURL}
-            />
+            <div className="w-full flex my-4 justify-end">
+              <input
+                className="w-2/3 px-3 py-1 text-grey-darker"
+                name="imageURL"
+                required={true}
+                type={"url"}
+                placeholder="link to your pet's photo"
+                onChange={e => setImageURL(e.target.value)}
+                value={imageURL}
+              />
+            </div>
           )}
-          <Button variant="raised" color={"primary"}>
-            Add my pet
-          </Button>
-        </Form>
+          <div className="w-full flex justify-end">
+            <div className="w-2/3 my-4 text-center">
+              <button className="bg-my-green shadow hover:shadow-md px-3 py-2 rounded-lg">
+                Add my pet
+              </button>
+            </div>
+          </div>
+        </form>
       ) : (
-        <div className="sign-in-request">Please sign in to add a pet</div>
+        <div className="w-1/3 mx-auto bg-my-blue font-bold my-4 py-4 px-2 text-center">
+          Please sign in to add a pet
+        </div>
       )}
     </div>
   );
