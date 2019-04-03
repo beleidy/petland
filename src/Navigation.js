@@ -50,7 +50,7 @@ function Navigation(props) {
   return (
     <div
       id="navbar"
-      className="w-full bg-my-orange flex flex-wrap items-center justify-between px-5"
+      className="w-full bg-my-orange flex flex-wrap items-center justify-between px-5 py-4"
     >
       <Link
         to="/"
@@ -64,15 +64,20 @@ function Navigation(props) {
         activeClassName=""
         to="/add-pet"
       >
-        <button className="px-2 py-3 bg-my-green rounded-lg shadow hover:shadow-md">
+        <button className="px-4 py-3 bg-my-green rounded-lg shadow hover:shadow-md">
           Add Pet
         </button>
       </Link>
 
       {signedIn ? (
         <div>
-          <span className="">{displayName}</span>
-          <button onClick={userSignOut}>Sign out</button>
+          <button
+            className="px-4 py-3 bg-my-purple rounded-lg shadow hover:shadow-md"
+            onClick={userSignOut}
+          >
+            Sign out
+          </button>
+          <span className="pl-6 pr-2 py-3">{displayName}</span>
         </div>
       ) : (
         ""
