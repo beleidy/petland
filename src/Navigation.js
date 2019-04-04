@@ -79,7 +79,6 @@ function Navigation(props) {
 
       <Link
         className="text-md text-header-color font-content no-underline mx-5"
-        activeClassName=""
         to="/add-pet"
       >
         <button className="px-4 py-3 bg-my-green rounded-lg shadow hover:shadow-md">
