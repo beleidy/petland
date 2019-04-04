@@ -27,18 +27,24 @@ function Navigation(props) {
       if (user) {
         // User is signed in.
         const currentUser = firebase.auth().currentUser;
-        currentUser.updateProfile({
-          displayName: currentUser.providerData[0].displayName,
-          photoURL: currentUser.providerData[0].photoURL
-        });
+        console.log(currentUser);
 
-        fetch(firebase.auth().currentUser.photoURL)
+        fetch(currentUser.providerData[0].photoURL)
           .then(response => response.blob())
-          .then(image => {
-            const storageRootRef = firebase.storage().ref();
-            const ownerId = firebase.auth().currentUser.uid;
-            const storageFileRef = storageRootRef.child(`${ownerId}/userPhoto`);
-            storageFileRef.put(image);
+          .then(async image => {
+            const ownerId = currentUser.uid;
+            const storageFileRef = firebase
+              .storage()
+              .ref()
+              .child(`${ownerId}/userPhoto`);
+            await storageFileRef.put(image);
+            storageFileRef.getDownloadURL().then(photoURL => {
+              console.log(photoURL);
+              currentUser.updateProfile({
+                displayName: currentUser.providerData[0].displayName,
+                photoURL
+              });
+            });
           });
 
         // Set the state for signed in user
