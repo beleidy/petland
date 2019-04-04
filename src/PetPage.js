@@ -62,13 +62,26 @@ function PetPage(props) {
         // Take the comment and key from the db and put them in local consts
         const { comment, authorId, timestamp } = snapshot.val();
 
-        db.child(`/users/${authorId}`).once("value", snapshot => {
-          const { displayName, photoURL } = snapshot.val();
+        // setup local cache of author info to speed up loading
+        // reduce load on db, and prevent mixed info for same author
+        // in case they change info while we are loading
 
+        const authorCache = {};
+
+        if (authorId in authorCache) {
+          const { displayName, photoURL } = authorCache[authorId];
           setComments(comments =>
             comments.concat({ comment, displayName, photoURL, timestamp })
           );
-        });
+        } else {
+          db.child(`/users/${authorId}`).once("value", snapshot => {
+            const { displayName, photoURL } = snapshot.val();
+            authorCache[authorId] = { displayName, photoURL };
+            setComments(comments =>
+              comments.concat({ comment, displayName, photoURL, timestamp })
+            );
+          });
+        }
       }
     );
   }, []);
