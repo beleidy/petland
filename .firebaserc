@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "petland-4b867"
+    "default": "petland-4b867",
+    "staging": "petland-dev",
+    "production": "petland-4b867"
   }
 }
