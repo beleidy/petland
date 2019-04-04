@@ -23,33 +23,35 @@ function Navigation(props) {
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
 
     // Set observer on user state
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        // User is signed in.
-        const currentUser = firebase.auth().currentUser;
-        console.log(currentUser);
+        // user is signed in.
+        const { currentUser } = firebase.auth();
+        const { uid } = currentUser;
+        const { displayName, photoURL } = currentUser.providerData[0];
 
-        fetch(currentUser.providerData[0].photoURL)
-          .then(response => response.blob())
-          .then(async image => {
-            const ownerId = currentUser.uid;
-            const storageFileRef = firebase
-              .storage()
-              .ref()
-              .child(`${ownerId}/userPhoto`);
-            await storageFileRef.put(image);
-            storageFileRef.getDownloadURL().then(photoURL => {
-              console.log(photoURL);
-              currentUser.updateProfile({
-                displayName: currentUser.providerData[0].displayName,
-                photoURL
-              });
-            });
-          });
+        // upload user image to our storage
+        const storageFileRef = firebase
+          .storage()
+          .ref()
+          .child(`${uid}/userPhoto`);
+
+        const response = await fetch(photoURL);
+        const image = await response.blob();
+        await storageFileRef.put(image);
+        const localphotoURL = await storageFileRef.getDownloadURL();
+        currentUser.updateProfile({ displayName, photoURL: localphotoURL });
+
+        // store user details in our db
+        const dbKey = firebase
+          .database()
+          .ref()
+          .child(`/users/${uid}`);
+        dbKey.set({ displayName, photoURL: localphotoURL });
 
         // Set the state for signed in user
         setSignedIn(1);
-        setDisplayName(currentUser.displayName);
+        setDisplayName(displayName);
       } else {
         // No user is signed in.
         setSignedIn(0);
