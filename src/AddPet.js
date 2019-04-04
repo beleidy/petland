@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
+import "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
 function AddPet(props) {
@@ -211,7 +212,7 @@ function AddPet(props) {
                 defaultChecked={true}
                 onClick={handleRadioClick}
               />
-              <label for="image-upload-radio">Upload image</label>
+              <label htmlFor="image-upload-radio">Upload image</label>
             </div>
             <div className="w-1/2 text-center my-2">
               <input
@@ -222,14 +223,14 @@ function AddPet(props) {
                 value="link"
                 onClick={handleRadioClick}
               />
-              <label for="image-link-radio">Link to image</label>
+              <label htmlFor="image-link-radio">Link to image</label>
             </div>
           </div>
 
           {isFileUpload ? (
             <div className="w-full flex my-4 justify-end">
               <label
-                for="imageFile"
+                htmlFor="imageFile"
                 className="w-2/3 py-1 bg-my-green text-center rounded shadow hover:shadow-md focus:bg-my-orange"
               >
                 {uploadFile ? uploadFile.name : "Click here to select file"}

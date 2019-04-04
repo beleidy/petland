@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import Moment from "moment";
@@ -15,20 +15,21 @@ function PetPage(props) {
   const [pet, setPet] = useState({ name: "", imageURL: "" });
   const [petExists, setPetExists] = useState(true);
 
+  const db = firebase.database().ref();
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        const { displayName, photoURL } = firebase.auth().currentUser;
+        const { uid } = firebase.auth().currentUser;
 
         setUser({
           signedIn: 1,
-          displayName,
-          photoURL
+          uid
         });
       } else {
         // No user is signed in.
 
-        setUser({ signedIn: 0, displayName: "", photoURL: "" });
+        setUser({ signedIn: 0, displayName: "", uid: null });
       }
     });
 
@@ -55,22 +56,34 @@ function PetPage(props) {
       });
 
     // Runs once for each child in posts node
-    firebase
-      .database()
-      .ref()
-      .child("/comments/" + props.match.params.id)
-      .on("child_added", snapshot => {
+    db.child("/comments/" + props.match.params.id).on(
+      "child_added",
+      snapshot => {
         // Take the comment and key from the db and put them in local consts
-        const {
-          comment,
-          userDisplayName,
-          userPhotoURL,
-          timestamp
-        } = snapshot.val();
-        setComments(comments =>
-          comments.concat({ comment, userDisplayName, userPhotoURL, timestamp })
-        );
-      });
+        const { comment, authorId, timestamp } = snapshot.val();
+
+        // setup local cache of author info to speed up loading
+        // reduce load on db, and prevent mixed info for same author
+        // in case they change info while we are loading
+
+        const authorCache = {};
+
+        if (authorId in authorCache) {
+          const { displayName, photoURL } = authorCache[authorId];
+          setComments(comments =>
+            comments.concat({ comment, displayName, photoURL, timestamp })
+          );
+        } else {
+          db.child(`/users/${authorId}`).once("value", snapshot => {
+            const { displayName, photoURL } = snapshot.val();
+            authorCache[authorId] = { displayName, photoURL };
+            setComments(comments =>
+              comments.concat({ comment, displayName, photoURL, timestamp })
+            );
+          });
+        }
+      }
+    );
   }, []);
 
   if (petExists) {
@@ -87,11 +100,7 @@ function PetPage(props) {
         />
 
         {user.signedIn ? (
-          <InputBox
-            userDisplayName={user.displayName}
-            userPhotoURL={user.photoURL}
-            petId={props.match.params.id}
-          />
+          <InputBox userID={user.uid} petId={props.match.params.id} />
         ) : (
           <div className="w-1/3 mx-auto bg-my-blue font-bold my-4 py-4 px-2 text-center">
             Please sign in to leave a comment
@@ -102,7 +111,7 @@ function PetPage(props) {
             .slice()
             .reverse()
             .map(comment => (
-              <CommentBox {...comment} />
+              <CommentBox key={comment.timestamp} {...comment} />
             ))}
         </div>
       </div>
@@ -139,8 +148,6 @@ function InputBox(props) {
     var dbComment = {
       authorId: user.uid,
       comment: value.slice(),
-      userDisplayName: props.userDisplayName,
-      userPhotoURL: props.userPhotoURL,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     };
 
@@ -157,14 +164,9 @@ function InputBox(props) {
 
   const handleChange = event => {
     event.preventDefault();
-    const user = firebase.auth().currentUser;
-    if (!user) {
-      alert("You cannot leave a comment if you are not signed in");
-      return null;
-    } else {
-      const currentText = event.target.value.slice();
-      setValue(currentText);
-    }
+
+    const currentText = event.target.value.slice();
+    setValue(currentText);
   };
 
   return (
@@ -182,21 +184,17 @@ function InputBox(props) {
   );
 }
 
-function CommentBox(props) {
+function CommentBox({ comment, displayName, photoURL, timestamp }) {
   return (
     <div className="w-5/6 mx-auto flex bg-my-orange rounded-lg my-4 font-content text-content-color">
-      <div className="flex-grow px-4 py-8">{props.comment}</div>
+      <div className="flex-grow px-4 py-8">{comment}</div>
 
       <div className="w-1/5 text-center text-grey-darkest bg-my-blue py-4 px-2 rounded-r-lg">
-        <img
-          className="rounded-sm"
-          src={props.userPhotoURL}
-          alt="Comment author"
-        />
-        <p className="">{props.userDisplayName}</p>
-        {props.timestamp ? (
+        <img className="rounded-sm" src={photoURL} alt="Comment author" />
+        <p className="">{displayName}</p>
+        {timestamp ? (
           <div className="text-xs text-grey">
-            {Moment(props.timestamp).calendar()}
+            {Moment(timestamp).calendar()}
           </div>
         ) : (
           ""
