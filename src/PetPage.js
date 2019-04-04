@@ -18,7 +18,7 @@ function PetPage(props) {
   const db = firebase.database().ref();
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(async user => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         const { uid } = firebase.auth().currentUser;
 
@@ -84,6 +84,8 @@ function PetPage(props) {
         }
       }
     );
+
+    return unsubscribe;
   }, []);
 
   if (petExists) {

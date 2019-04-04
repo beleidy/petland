@@ -15,7 +15,7 @@ function AddPet(props) {
 
   useEffect(() => {
     // Set observer on user state
-    firebase.auth().onAuthStateChanged(user => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       //If the user is signed in, set isSigned in to true, otherwise set it false
       if (user) {
         setIsSignedIn(true);
@@ -23,6 +23,7 @@ function AddPet(props) {
         setIsSignedIn(false);
       }
     });
+    return unsubscribe;
   }, []);
 
   const handleSubmit = event => {
@@ -116,7 +117,7 @@ function AddPet(props) {
     var uploadTask = storageFileRef.put(imageBlob);
 
     // Track file upload status in console, can be used later to animate a progress bar
-    uploadTask.on(
+    const cancelUploadListner = uploadTask.on(
       "state_changed",
       snapshot => {
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -159,6 +160,7 @@ function AddPet(props) {
           setImageURL("");
           // Navigate user back to welcome page
           props.history.push("/pet/" + newKey);
+          cancelUploadListner();
         });
       }
     );
