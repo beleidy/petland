@@ -1,6 +1,6 @@
 # Petland
-[![Build Status](https://travis-ci.org/beleidy/Pet-Land.svg?branch=master)](https://travis-ci.org/beleidy/Pet-Land) 
-[![Stories in Progress](https://badge.waffle.io/beleidy/Pet-Land.svg?label=In%20progress&title=In%20Progress)](http://waffle.io/beleidy/Pet-Land)
+[![pipeline status](https://gitlab.com/beleidy/petland/badges/master/pipeline.svg)](https://gitlab.com/beleidy/petland/commits/master)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
