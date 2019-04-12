@@ -9,37 +9,40 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 * NodeJS with npm -- https://nodejs.org/en/
-* Firebase-cli https://github.com/firebase/firebase-tools
-```
-npm install -g firebase-tools
-```
+* Firebase-cli  https://github.com/firebase/firebase-tools  ```npm install -g firebase-tools```
 * A firebase project to use for database an file storage, this can be a seperate project to where you host your production version. -- https://firebase.google.com/
 
 
 ### Installing
 
-#### Seting up your firebase project
-https://firebase.google.com/docs/web/setup
+#### Set up your local development directory
 
-Open a terminal and go to the directory where you want to install the app
-```cd ~```
+These instructions set up a `petland` directory in your home directory. For other locations substitute `~` for your preferred location.
 
-Clone the repo to your local directory
 ```
+cd ~
 git clone https://gitlab.com/beleidy/petland.git
-```
-
-cd into the cloned directory
-```
 cd petland
-```
-
-Install the app using npm
-```
 npm install
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+
+#### Set up your firebase project
+https://firebase.google.com/docs/web/setup
+
+Once you have a firebase project setup, you will need to login on the cli-tools and connect the local directory to your project. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
+
+```
+firebase login
+firebase use --add
+```
+Follow instructions and add the alias `staging` to the project you'd like to use for development. Once you've completed this susccessfully, you can start the app.
+```
+npm start
+```
+
+If this hasn't happened automatically, point your browser to ```http://localhost:3000/``` and you should see the app running.
+
 
 ## Running the tests
 
