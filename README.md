@@ -57,9 +57,10 @@ For users to be able to sign in using Facebook, your firebase project needs to b
 To connect your app, follow Firebase documentation instructions in the before you begin section here https://firebase.google.com/docs/auth/web/facebook-login#before_you_begin
 
 #### Run the app locally
-Login on the cli-tools and connect the local directory to your project. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
+Login on the cli-tools and connect the local directory to the project you just created. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too that connects to a different firebase project. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
 ```
 firebase login
+firebase init
 firebase use --add
 ```
 Follow instructions and add the alias `staging` to the project you'd like to use for development. Once you've completed this susccessfully, you can start the app.
