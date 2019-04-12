@@ -16,8 +16,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installing
 
 #### Set up your local development directory
-
-These instructions set up a `petland` directory in your home directory. For other locations substitute `~` for your preferred location.
+This sets up a `petland` directory in your home directory. For other locations substitute `~` for your preferred location.
+Clone the code and install the node modules.
 
 ```
 cd ~
@@ -30,7 +30,32 @@ npm install
 #### Set up your firebase project
 https://firebase.google.com/docs/web/setup
 
-Once you have a firebase project setup, you will need to login on the cli-tools and connect the local directory to your project. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
+Once your project has been created, go to Firebase Authentication, sign-in methods and enable Facebook. This will allow your users to use their Facebook accounts to sign in to your app.
+
+Next, go to Database on the side menu and enable Realtime Database. You will need to add database rules to only allow authenticated users to write to the database. This means only users who have signed-in are able to add pets or comment on pet pages. The rules look like this:
+```
+{
+  "rules": {
+    ".read": true,
+    ".write": "auth != null"
+  }
+}
+```
+
+Then go to Storage in the side menu, and enable it. You will also need to add storage rules to only allow authenticated users to upload files.
+```
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read;
+      allow write: if request.auth != null;
+    }
+  }
+}
+```
+
+
+Login on the cli-tools and connect the local directory to your project. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
 
 ```
 firebase login
