@@ -69,30 +69,29 @@ npm start
 
 If this hasn't happened automatically, point your browser to ```http://localhost:3000/``` and you should see the app running.
 
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+To deoply to your project, first we build it, and then tell firebase to deploy. If you are running both staging and production projects, make sure you are using the correct alias before you build and deploy: ```firebase use <alias>```
+
+```
+npm run build
+firebase deploy
+```
+
+## Notes on running multiple enviornments/projects
+Whether you are running your app locally, or on firebase's servers, you are connecting to the same database and file storage. This is why it's important to make sure you are using the correct alias at all the times, to make sure your local code is not interfering with the database of a live or production system.
+
+## Notes on GitlabCI
+
+If you are using Gitlab as remote repository, the included .gitlab-ci file will cause GitlabCI to run deployment pipelines whenever you merge to staging or master branches. If you have not setup your Firebase token to authorise the GitlabCI instance, your pipeline will fail. 
+
+To set this up, you will first need to get a non-internactive token from your local firebase-cli installation.
+```
+firebase login:ci
+```
+Once you're authenticated, you will get a login token in the terminal.
+
+Set this token as the value of the enviornment variable ```FIREBASE_TOKEN``` and firebase will use it automatically. To do this set it with GitlabUI so that it is not stored in your git repo for others to see. https://docs.gitlab.com/ee/ci/variables/#via-the-ui
 
 ## Built With
 
