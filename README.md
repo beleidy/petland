@@ -18,7 +18,6 @@ These instructions will get you a copy of the project up and running on your loc
 #### Set up your local development directory
 This sets up a `petland` directory in your home directory. For other locations substitute `~` for your preferred location.
 Clone the code and install the node modules.
-
 ```
 cd ~
 git clone https://gitlab.com/beleidy/petland.git
@@ -30,9 +29,7 @@ npm install
 #### Set up your firebase project
 https://firebase.google.com/docs/web/setup
 
-Once your project has been created, go to Firebase Authentication, sign-in methods and enable Facebook. This will allow your users to use their Facebook accounts to sign in to your app.
-
-Next, go to Database on the side menu and enable Realtime Database. You will need to add database rules to only allow authenticated users to write to the database. This means only users who have signed-in are able to add pets or comment on pet pages. The rules look like this:
+Once your project has been created, go to Database on the side menu and enable Realtime Database. You will need to add database rules to only allow authenticated users to write to the database. This means only users who have signed-in are able to add pets or comment on pet pages. The rules look like this:
 ```
 {
   "rules": {
@@ -54,9 +51,13 @@ service firebase.storage {
 }
 ```
 
+#### Connect your firebase project to your facebook developer account
+For users to be able to sign in using Facebook, your firebase project needs to be regesitered under your Facebook developer account. If you don't already have one, you can set up one here https://developers.facebook.com/
 
+To connect your app, follow Firebase documentation instructions in the before you begin section here https://firebase.google.com/docs/auth/web/facebook-login#before_you_begin
+
+#### Run the app locally
 Login on the cli-tools and connect the local directory to your project. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
-
 ```
 firebase login
 firebase use --add
