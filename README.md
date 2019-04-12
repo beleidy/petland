@@ -8,9 +8,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* NodeJS with npm -- https://nodejs.org/en/
-* Firebase-cli  https://github.com/firebase/firebase-tools  ```npm install -g firebase-tools```
-* A firebase project to use for database an file storage, this can be a seperate project to where you host your production version. -- https://firebase.google.com/
+* [NodeJS with npm](https://nodejs.org/en/)
+* [Firebase-cli](https://github.com/firebase/firebase-tools) -- ```npm install -g firebase-tools```
+* A [firebase](https://firebase.google.com/) project to use for database an file storage, this can be a seperate project to where you host your production version.
 
 
 ### Installing
@@ -52,12 +52,12 @@ service firebase.storage {
 ```
 
 #### Connect your firebase project to your facebook developer account
-For users to be able to sign in using Facebook, your firebase project needs to be regesitered under your Facebook developer account. If you don't already have one, you can set up one here https://developers.facebook.com/
+For users to be able to sign in using Facebook, your firebase project needs to be regesitered under your Facebook developer account. If you don't already have one, you can [set one up here](https://developers.facebook.com/)
 
-To connect your app, follow Firebase documentation instructions in the before you begin section here https://firebase.google.com/docs/auth/web/facebook-login#before_you_begin
+To connect your app, [follow Firebase documentation instructions in the before you begin section here](https://firebase.google.com/docs/auth/web/facebook-login#before_you_begin)
 
 #### Run the app locally
-Login on the cli-tools and connect the local directory to the project you just created. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too that connects to a different firebase project. For more information about Firebase aliases see https://firebase.google.com/docs/cli/#project_aliases
+Login on the cli-tools and connect the local directory to the project you just created. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too that connects to a different firebase project. [More information about Firebase aliases](https://firebase.google.com/docs/cli/#project_aliases)
 ```
 firebase login
 firebase init
@@ -92,34 +92,19 @@ firebase login:ci
 ```
 Once you're authenticated, you will get a login token in the terminal.
 
-Set this token as the value of the enviornment variable ```FIREBASE_TOKEN``` and firebase will use it automatically. To do this set it with the Gitlab UI and not through the .gitlab-ci file so that it is not stored in your git repo for others to see. https://docs.gitlab.com/ee/ci/variables/#via-the-ui
+Set this token as the value of the enviornment variable ```FIREBASE_TOKEN``` and firebase will use it automatically. To do this [set it with the Gitlab UI](https://docs.gitlab.com/ee/ci/variables/#via-the-ui) and not through the .gitlab-ci file so that it is not stored in your git repo for others to see. 
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [React](https://reactjs.org/)
+* [Create React App](https://github.com/facebook/create-react-app)
+* [Firebase](https://firebase.google.com/)
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Amr Elbeleidy** - *Initial work*
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
