@@ -1,105 +1,110 @@
 # Petland
-[![Build Status](https://travis-ci.org/beleidy/Pet-Land.svg?branch=master)](https://travis-ci.org/beleidy/Pet-Land) 
-[![Stories in Progress](https://badge.waffle.io/beleidy/Pet-Land.svg?label=In%20progress&title=In%20Progress)](http://waffle.io/beleidy/Pet-Land)
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+Petland is a web app that allows you to create a page for your pet. Upload an image and you and others can leave comments on your pet's page.
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### `npm start`
+### Prerequisites
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](#running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](#deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+* [NodeJS with npm](https://nodejs.org/en/)
+* [Firebase-cli](https://github.com/firebase/firebase-tools) -- ```npm install -g firebase-tools```
+* A [firebase](https://firebase.google.com/) project to use for database an file storage, this can be a seperate project to where you host your production version.
 
 
+### Installing
 
-
->**For Visual Studio Code users**
-
->VS Code ESLint plugin automatically detects Create React App's configuration file. So you do not need to create `eslintrc.json` at the root directory, except when you want to add your own rules. In that case, you should include CRA's config by adding this line:
-
->```js
-{
-  // ...
-  "extends": "react-app"
-}
+#### Set up your local development directory
+This sets up a `petland` directory in your home directory. For other locations substitute `~` for your preferred location.
+Clone the code and install the node modules.
+```
+cd ~
+git clone https://gitlab.com/beleidy/petland.git
+cd petland
+npm install
 ```
 
-Then add this block to the `package.json` file of your project:
 
-```js
+#### Set up your firebase project
+https://firebase.google.com/docs/web/setup
+
+Once your project has been created, go to Database on the side menu and enable Realtime Database. You will need to add database rules to only allow authenticated users to write to the database. This means only users who have signed-in are able to add pets or comment on pet pages. The rules look like this:
+```
 {
-  // ...
-  "eslintConfig": {
-    "extends": "react-app"
+  "rules": {
+    ".read": true,
+    ".write": "auth != null"
   }
 }
 ```
 
-Finally, you will need to install some packages *globally*:
-
-```sh
-npm install -g eslint-config-react-app@0.3.0 eslint@3.8.1 babel-eslint@7.0.0 eslint-plugin-react@6.4.1 eslint-plugin-import@2.0.1 eslint-plugin-jsx-a11y@4.0.0 eslint-plugin-flowtype@2.21.0
+Then go to Storage in the side menu, and enable it. You will also need to add storage rules to only allow authenticated users to upload files.
 ```
-
-We recognize that this is suboptimal, but it is currently required due to the way we hide the ESLint dependency. The ESLint team is already [working on a solution to this](https://github.com/eslint/eslint/issues/3458) so this may become unnecessary in a couple of months.
-
-## Debugging in the Editor
-
-**This feature is currently only supported by [Visual Studio Code](https://code.visualstudio.com) editor.**
-
-Visual Studio Code supports live-editing and debugging out of the box with Create React App. This enables you as a developer to write and debug your React code without leaving the editor, and most importantly it enables you to have a continuous development workflow, where context switching is minimal, as you don’t have to switch between tools.
-
-You would need to have the latest version of [VS Code](https://code.visualstudio.com) and VS Code [Chrome Debugger Extension](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) installed.
-
-Then add the block below to your `launch.json` file and put it inside the `.vscode` folder in your app’s root directory.
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [{
-    "name": "Chrome",
-    "type": "chrome",
-    "request": "launch",
-    "url": "http://localhost:3000",
-    "webRoot": "${workspaceRoot}/src",
-    "userDataDir": "${workspaceRoot}/.vscode/chrome",
-    "sourceMapPathOverrides": {
-      "webpack:///src/*": "${webRoot}/*"
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read;
+      allow write: if request.auth != null;
     }
-  }]
+  }
 }
 ```
 
-Start your app by running `npm start`, and start debugging in VS Code by pressing `F5` or by clicking the green debug icon. You can now write code, set breakpoints, make changes to the code, and debug your newly modified code—all from your editor.
+#### Connect your firebase project to your facebook developer account
+For users to be able to sign in using Facebook, your firebase project needs to be regesitered under your Facebook developer account. If you don't already have one, you can [set one up here](https://developers.facebook.com/)
 
+To connect your app, [follow Firebase documentation instructions in the before you begin section here](https://firebase.google.com/docs/auth/web/facebook-login#before_you_begin)
+
+#### Run the app locally
+Login on the cli-tools and connect the local directory to the project you just created. Since the app is using firebase aliases to seperate staging and production enviornments, you will need to setup at least a staging alias for local development. If you would also like to push to production, you will need to setup a production alias too that connects to a different firebase project. [More information about Firebase aliases](https://firebase.google.com/docs/cli/#project_aliases)
+```
+firebase login
+firebase init
+firebase use --add
+```
+Follow instructions and add the alias `staging` to the project you'd like to use for development. Once you've completed this susccessfully, you can start the app.
+```
+npm start
+```
+
+If this hasn't happened automatically, point your browser to ```http://localhost:3000/``` and you should see the app running.
+
+## Deployment
+
+To deoply to your project, first we build it, and then tell firebase to deploy. If you are running both staging and production projects, make sure you are using the correct alias before you build and deploy: ```firebase use <alias>```
+
+```
+npm run build
+firebase deploy
+```
+## Notes
+### Notes on running multiple enviornments/projects
+Whether you are running your app locally, or on firebase's servers, you are connecting to the same database and file storage. This is why it's important to make sure you are using the correct alias at all the times, to make sure your local code is not interfering with the database of a live or production system.
+
+### Notes on GitlabCI
+
+If you are using Gitlab as remote repository, the included .gitlab-ci file will cause GitlabCI to run deployment pipelines whenever you merge to staging or master branches. If you have not setup your Firebase token to authorise the GitlabCI instance, your pipeline will fail. 
+
+To set this up, you will first need to get a non-internactive token from your local firebase-cli installation.
+```
+firebase login:ci
+```
+Once you're authenticated, you will get a login token in the terminal.
+
+Set this token as the value of the enviornment variable ```FIREBASE_TOKEN``` and firebase will use it automatically. To do this [set it with the Gitlab UI](https://docs.gitlab.com/ee/ci/variables/#via-the-ui) and not through the .gitlab-ci file so that it is not stored in your git repo for others to see. 
+
+## Built With
+
+* [React](https://reactjs.org/)
+* [Create React App](https://github.com/facebook/create-react-app)
+* [Firebase](https://firebase.google.com/)
+
+
+## Authors
+
+* **Amr Elbeleidy** - *Initial work*
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
